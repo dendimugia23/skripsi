@@ -46,6 +46,7 @@ class AdminPetaController extends Controller
             'password' => $request->password,
             'status' => $request->status,
             'status_validasi' => 'Pending',
+            'komentar' => null,
         ]);
 
         return redirect()->route('admin.peta')->with('success', 'WiFi berhasil ditambahkan, menunggu validasi super admin.');
@@ -89,13 +90,17 @@ class AdminPetaController extends Controller
     {
         $request->validate([
             'status_validasi' => 'required|in:Disetujui,Ditolak',
+            'komentar' => 'nullable|string|max:255',
         ]);
 
         if (auth()->user()->role !== 'superadmin') {
             return redirect()->route('admin.peta')->with('error', 'Anda tidak memiliki izin untuk memvalidasi.');
         }
 
-        $wifi->update(['status_validasi' => $request->status_validasi]);
+        $wifi->update([
+            'status_validasi' => $request->status_validasi,
+            'komentar' => $request->status_validasi === 'Ditolak' ? $request->komentar : null,
+        ]);
 
         return redirect()->route('superadmin.peta')->with('success', 'Status validasi WiFi diperbarui.');
     }
@@ -115,6 +120,7 @@ class AdminPetaController extends Controller
         $sheet->setCellValue('F1', 'Password');
         $sheet->setCellValue('G1', 'Status');
         $sheet->setCellValue('H1', 'Status Validasi');
+        $sheet->setCellValue('I1', 'Komentar');
 
         $row = 2;
         foreach ($wifiData as $index => $data) {
@@ -126,6 +132,7 @@ class AdminPetaController extends Controller
             $sheet->setCellValue('F' . $row, $data->password);
             $sheet->setCellValue('G' . $row, $data->status);
             $sheet->setCellValue('H' . $row, $data->status_validasi);
+            $sheet->setCellValue('I' . $row, $data->komentar);
             $row++;
         }
 

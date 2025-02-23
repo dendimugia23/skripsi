@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('password');
             $table->enum('status', ['Online', 'Offline']);
             $table->enum('status_validasi', ['Pending', 'Disetujui', 'Ditolak'])->default('Pending');
+            $table->string('komentar')->nullable();
             $table->timestamps();
         });
     }

@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name', 'Admin Panel') }}</title>
-    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+
     <!-- Load Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     
@@ -181,5 +182,21 @@
             }
         });
     </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var modals = document.querySelectorAll('.modal');
+        modals.forEach(function(modal) {
+            modal.addEventListener('hidden.bs.modal', function () {
+                document.body.classList.remove('modal-open');
+                var modalBackdrops = document.getElementsByClassName('modal-backdrop');
+                for (let i = 0; i < modalBackdrops.length; i++) {
+                    modalBackdrops[i].parentNode.removeChild(modalBackdrops[i]);
+                }
+            });
+        });
+    });
+</script>
+
 </body>
 </html>

@@ -18,6 +18,7 @@ class WiFi extends Model
         'ssid',
         'password',
         'status',
-        'status_validasi', // Tambahkan ini
+        'status_validasi', 
+        'komentar',// Tambahkan ini
     ];
 }

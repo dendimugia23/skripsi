@@ -82,16 +82,38 @@
                                                 </form>
                                             </li>
                                             <li>
-                                                <form action="{{ route('superadmin.validasi', $data->id) }}" method="POST">
-                                                    @csrf
-                                                    @method('PUT')
-                                                    <input type="hidden" name="status_validasi" value="Ditolak">
-                                                    <button type="submit" class="dropdown-item text-danger fw-bold d-flex align-items-center gap-2">
-                                                        <i class="fas fa-times"></i> Ditolak
-                                                    </button>
-                                                </form>
+                                                <button type="button" class="dropdown-item text-danger fw-bold d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#rejectModal-{{ $data->id }}">
+                                                    <i class="fas fa-times"></i> Ditolak
+                                                </button>
                                             </li>
                                         </ul>
+                                    </div>
+
+                                    <!-- Reject Modal -->
+                                    <div class="modal fade" id="rejectModal-{{ $data->id }}" tabindex="-1" aria-labelledby="rejectModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="rejectModalLabel">Tolak Validasi WiFi</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <form action="{{ route('superadmin.validasi', $data->id) }}" method="POST" onsubmit="return validateRejection(this)">
+                                                    @csrf
+                                                    @method('PUT')
+                                                    <div class="modal-body">
+                                                        <input type="hidden" name="status_validasi" value="Ditolak">
+                                                        <div class="mb-3">
+                                                            <label for="komentar" class="form-label">Komentar Penolakan</label>
+                                                            <textarea name="komentar" class="form-control" rows="3" placeholder="Berikan alasan penolakan..."></textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                                        <button type="submit" class="btn btn-danger">Tolak</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
                                     </div>
                                 @else
                                     <span class="text-muted">Sudah Diverifikasi</span>
@@ -119,5 +141,14 @@
     var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
         return new bootstrap.Tooltip(tooltipTriggerEl)
     })
+
+    function validateRejection(form) {
+        const komentar = form.komentar.value.trim();
+        if (!komentar) {
+            alert('Harap berikan alasan penolakan sebelum mengirim.');
+            return false;
+        }
+        return true;
+    }
 </script>
 @endpush

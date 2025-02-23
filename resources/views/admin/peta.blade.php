@@ -21,7 +21,6 @@
     </div>
 
     <div class="card-body">
-        <!-- Search Bar -->
         <div class="mb-3">
             <form action="{{ route('admin.peta') }}" method="GET">
                 <div class="input-group">
@@ -40,8 +39,8 @@
                 <thead>
                     <tr>
                         <th>No</th>
+                        <th>Nama WiFi</th>
                         <th>Lokasi WiFi</th>
-                        <th>Lihat Lokasi</th>
                         <th>Titik</th>
                         <th>SSID</th>
                         <th>Password</th>
@@ -76,13 +75,34 @@
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
                             </form>
+                            @if($data->status_validasi == 'Ditolak')
+                                <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#komentarModal-{{ $data->id }}">
+                                    <i class="fas fa-info-circle"></i>
+                                </button>
+
+                                <div class="modal fade" id="komentarModal-{{ $data->id }}" tabindex="-1" aria-labelledby="komentarModalLabel-{{ $data->id }}" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="komentarModalLabel-{{ $data->id }}">Alasan Penolakan</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>{{ $data->komentar ?: 'Tidak ada komentar' }}</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
                         </td>
                     </tr>
                     @endforeach
                 </tbody>
             </table>
 
-            <!-- Pagination -->
             <div class="d-flex justify-content-center mt-4">
                 {{ $wifi->onEachSide(1)->links('pagination::bootstrap-5') }}
             </div>
