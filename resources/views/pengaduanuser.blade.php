@@ -36,37 +36,39 @@
 
                         <!-- Nama (Optional) -->
                         <div class="mb-3">
-                            <label for="name" class="form-label">Nama (Opsional)</label>
-                            <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}" placeholder="Masukkan nama Anda">
-                        </div>
-
-                        <!-- Email (Optional) -->
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email (Opsional, untuk tindak lanjut)</label>
-                            <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}" placeholder="Masukkan email Anda">
-                        </div>
-
-                        <!-- Kategori Pengaduan -->
-                        <div class="mb-3">
-                            <label for="category" class="form-label">Kategori Pengaduan</label>
-                            <select class="form-select" id="category" name="category" required>
-                                <option value="">Pilih Kategori</option>
-                                <option value="Koneksi Lemot" {{ old('category') == 'Koneksi Lemot' ? 'selected' : '' }}>Koneksi Lemot</option>
-                                <option value="WiFi Mati" {{ old('category') == 'WiFi Mati' ? 'selected' : '' }}>WiFi Mati</option>
-                                <option value="Area Tidak Terjangkau" {{ old('category') == 'Area Tidak Terjangkau' ? 'selected' : '' }}>Area Tidak Terjangkau</option>
-                                <option value="Lainnya" {{ old('category') == 'Lainnya' ? 'selected' : '' }}>Lainnya</option>
+                            <label for="nama_wifi" class="form-label">Nama WiFi</label>
+                            <select class="form-select" id="nama_wifi" name="nama_wifi" required>
+                                <option value="" disabled selected>Pilih WiFi</option>
+                                @foreach($wifi as $data)
+                                    <option value="{{ $data->nama }}" {{ old('nama_wifi') == $data->nama ? 'selected' : '' }}>
+                                        {{ $data->nama }}
+                                    </option>
+                                @endforeach
                             </select>
                         </div>
-
+                        
+                        
+                       
+                        
+                        <!-- Kategori Pengaduan -->
+                        <div class="mb-3">
+                            <label for="kategori_pengaduan" class="form-label">Kategori Pengaduan</label>
+                            <select class="form-select" id="kategori_pengaduan" name="kategori_pengaduan" required>
+                                <option value="">Pilih Kategori</option>
+                                <option value="Tidak Ada Koneksi" {{ old('kategori_pengaduan') == 'Tidak Ada Koneksi' ? 'selected' : '' }}>Tidak Ada Koneksi</option>
+                                <option value="WiFi Mati" {{ old('kategori_pengaduan') == 'WiFi Mati' ? 'selected' : '' }}>WiFi Mati</option>
+                                <option value="Lainnya" {{ old('kategori_pengaduan') == 'Lainnya' ? 'selected' : '' }}>Lainnya</option>
+                            </select>
+                        </div>
+                        
                         <!-- Deskripsi Pengaduan -->
                         <div class="mb-3">
-                            <label for="description" class="form-label">Deskripsi Pengaduan</label>
-                            <textarea class="form-control" id="description" name="description" rows="4" required placeholder="Jelaskan masalah yang Anda alami...">{{ old('description') }}</textarea>
+                            <label for="deskripsi_pengaduan" class="form-label">Deskripsi Pengaduan</label>
+                            <textarea class="form-control" id="deskripsi_pengaduan" name="deskripsi_pengaduan" rows="4" required placeholder="Jelaskan masalah yang Anda alami...">{{ old('deskripsi_pengaduan') }}</textarea>
                         </div>
-
                         <!-- Upload Bukti (Optional) -->
                         <div class="mb-3">
-                            <label for="image" class="form-label">Upload Bukti (Opsional)</label>
+                            <label for="image_pengaduan" class="form-label">Upload Bukti (Opsional)</label>
                             <input type="file" class="form-control" id="image" name="image" accept="image/*">
                             <small class="text-muted">Format yang diterima: JPEG, PNG, JPG (Maksimal 2MB)</small>
                         </div>

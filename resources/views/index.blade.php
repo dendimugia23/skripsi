@@ -55,10 +55,10 @@
           <li><a href="#panduan">Panduan</a></li>
           <li><a href="#faq">FAQs</a></li>
           <li class="dropdown">
-            <a href="#"><span>Pengaduan</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+            <a href="{{ route('pengaduan.user') }}"><span>Pengaduan</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
             <ul>
               <li><a href="{{ route('pengaduan.user') }}">Buat Pengaduan</a></li>
-              <li><a href=#>Cari Pengaduan</a></li>
+              <li><a href=#search>Cari Pengaduan</a></li>
             </ul>
           </li>
 
@@ -80,7 +80,7 @@
               <li><a href="#">Dropdown 4</a></li>
             </ul>
           </li>
-          <li><a href="index.html#contact">Contact</a></li>
+         
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
@@ -111,7 +111,7 @@
 
 
     <!-- Contact Section -->
-    @include('kontak')
+    @include('caripengaduan')
 
   </main>
 
@@ -165,8 +165,8 @@
           <form action="forms/newsletter.php" method="post" class="php-email-form">
             <div class="newsletter-form"><input type="email" name="email"><input type="submit" value="Subscribe"></div>
             <div class="loading">Loading</div>
-            <div class="error-message"></div>
-            <div class="sent-message">Your subscription request has been sent. Thank you!</div>
+            
+           
           </form>
         </div>
 

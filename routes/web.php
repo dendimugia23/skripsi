@@ -10,6 +10,8 @@ use App\Http\Controllers\PengaduanuserController;
 use App\Http\Controllers\SuperAdminController;
 use App\Http\Controllers\SuperAdminPetaController;
 use App\Http\Controllers\SuperAdminRekapitulasiController;
+use App\Http\Controllers\UserController; // Diperbaiki
+
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\WifiExport;
 
@@ -19,7 +21,9 @@ use App\Exports\WifiExport;
 |--------------------------------------------------------------------------
 | Mengatur semua route dalam aplikasi.
 */
+
 Route::get('/user/map', [UserController::class, 'userMap'])->name('user.map');
+
 /** 
  * Halaman Utama 
  */
@@ -29,7 +33,8 @@ Route::get('/', [HomeController::class, 'index'])->name('index');
  * Pengaduan untuk User
  */
 Route::get('/pengaduan', [PengaduanuserController::class, 'index'])->name('pengaduan.user');
-Route::post('/pengaduan', [PengaduanController::class, 'store'])->name('pengaduan.store');
+Route::post('/pengaduan', [PengaduanuserController::class, 'store'])->name('pengaduan.store');
+Route::post('/search-pengaduan', [HomeController::class, 'searchPengaduan'])->name('search.pengaduan');
 
 /**
  * Autentikasi (Login, Register, dll.)
@@ -80,6 +85,7 @@ Route::middleware(['auth'])->group(function () {
         // Peta WiFi
         Route::get('/peta', [SuperAdminPetaController::class, 'index'])->name('superadmin.peta');
         Route::get('/map', [SuperAdminPetaController::class, 'map'])->name('superadmin.map');
+        
         // Validasi WiFi
         Route::put('/validasi/{wifi}', [SuperAdminPetaController::class, 'validasi'])->name('superadmin.validasi');
     });

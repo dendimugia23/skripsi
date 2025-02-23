@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\WiFi;
+use App\Models\Pengaduan;
 
 class HomeController extends Controller
 {
@@ -13,8 +14,32 @@ class HomeController extends Controller
      */
     public function index()
     {
-    $wifi = WiFi::where('status_validasi', 'Disetujui')->get();  
-    return view('index', compact('wifi'));// Pastikan file resources/views/index.blade.php ada
+        $wifi = WiFi::where('status_validasi', 'Disetujui')->get();  
+        return view('index', compact('wifi'));
+    }
+
+    /**
+     * Menangani pencarian tiket pengaduan.
+     */
+    public function searchPengaduan(Request $request)
+    {
+        $request->validate(['ticket_number' => 'required|string']);
+
+        $pengaduan = Pengaduan::where('ticket_number', $request->ticket_number)->first();
+
+        if (!$pengaduan) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Nomor tiket tidak ditemukan.'
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'ticket_number' => $pengaduan->ticket_number,
+            'status_pengaduan' => $pengaduan->status_pengaduan,
+            'description_pengaduan' => $pengaduan->deskripsi
+        ]);
     }
 
     /**
