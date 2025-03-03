@@ -19,6 +19,6 @@ class WiFi extends Model
         'password',
         'status',
         'status_validasi', 
-        'komentar',// Tambahkan ini
+        'komentar',
     ];
 }

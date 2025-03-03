@@ -65,7 +65,8 @@
                         <!-- Upload Bukti (Optional) -->
                         <div class="mb-3">
                             <label for="image_pengaduan" class="form-label">Upload Bukti (Opsional)</label>
-                            <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                            <input type="file" class="form-control" id="image_pengaduan" name="image_pengaduan" accept="image/*">
+
                             <small class="text-muted">Format yang diterima: JPEG, PNG, JPG (Maksimal 2MB)</small>
                         </div>
 
