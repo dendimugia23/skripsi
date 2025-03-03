@@ -5,6 +5,7 @@ use App\Models\Pengaduan;
 use App\Models\WiFi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Anhskohbo\NoCaptcha\NoCaptcha;
 
 class PengaduanuserController extends Controller
 {
