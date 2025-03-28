@@ -55,11 +55,11 @@
                     </td>
                     <td>
                         @if($data->status_pengaduan === 'Proses')
-                            <form action="{{ route('admin.validasi', $data->id) }}" method="POST">
+                            <form id="validation-form-{{ $data->id }}" action="{{ route('admin.validasi', $data->id) }}" method="POST">
                                 @csrf
                                 @method('PUT')
                                 <input type="hidden" name="status_pengaduan" value="Tervalidasi">
-                                <button type="submit" class="btn btn-success btn-sm d-flex align-items-center gap-2">
+                                <button type="button" class="btn btn-success btn-sm d-flex align-items-center gap-2" onclick="confirmValidation({{ $data->id }})">
                                     <i class="fas fa-check"></i> Validasi
                                 </button>
                             </form>
@@ -77,4 +77,7 @@
         </div>
     </div>
 </div>
+
 @endsection
+
+

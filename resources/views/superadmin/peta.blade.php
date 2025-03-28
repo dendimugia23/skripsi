@@ -42,6 +42,7 @@
                             <th>Password</th>
                             <th>Status Validasi</th>
                             <th>Status</th>
+                            <th>Total Pengguna</th> <!-- New column for Total Pengguna -->
                             <th style="width: 120px;">Aksi</th>
                         </tr>
                     </thead>
@@ -64,6 +65,7 @@
                                     {{ $data->status }}
                                 </span>
                             </td>
+                            <td>{{ $data->total_pengguna ?? 0 }}</td> <!-- Displaying Total Pengguna -->
                             <td>
                                 @if($data->status_validasi === 'Pending')
                                     <div class="dropdown">

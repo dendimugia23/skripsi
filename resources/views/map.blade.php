@@ -47,6 +47,7 @@
       popupAnchor: [1, -34]
     });
 
+    // Assume wifiData contains the total_pengguna field
     const wifiData = @json($wifi);
     const markers = [];
 
@@ -55,6 +56,7 @@
       const icon = wifi.status.toLowerCase() === 'online' ? greenIcon : redIcon;
       const marker = L.marker([latitude, longitude], { icon }).addTo(map);
 
+      // Modify the popup to include total_pengguna
       marker.bindPopup(`
     <div style="
         font-family: Arial, sans-serif;
@@ -76,14 +78,22 @@
             <strong>Status:</strong> 
             <span style="
                 font-weight: bold;
-                color: ${wifi.status === 'Online' ? '#28a745' : '#dc3545'};
-            ">
+                color: ${wifi.status === 'Online' ? '#28a745' : '#dc3545'};">
                 ${wifi.status}
-            </span>
+            </span><br>
+            <strong>Total Pengguna:</strong> ${wifi.total_pengguna || 0}
         </p>
     </div>
 `);
-      markers.push({ marker, status: wifi.status.toLowerCase(), nama: wifi.nama.toLowerCase(), lokasi: wifi.lokasi.toLowerCase(), lat: latitude, lng: longitude });
+
+      markers.push({
+        marker,
+        status: wifi.status.toLowerCase(),
+        nama: wifi.nama.toLowerCase(),
+        lokasi: wifi.lokasi.toLowerCase(),
+        lat: latitude,
+        lng: longitude
+      });
     });
 
     function filterMarkers(status, searchText) {
@@ -121,6 +131,7 @@
 
     filterMarkers('all', '');
   });
+
 </script>
 
 

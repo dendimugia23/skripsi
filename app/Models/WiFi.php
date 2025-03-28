@@ -18,7 +18,8 @@ class WiFi extends Model
         'ssid',
         'password',
         'status',
-        'status_validasi', 
+        'status_validasi',
         'komentar',
+        'total_pengguna', // Add 'total_pengguna' to the $fillable array
     ];
 }

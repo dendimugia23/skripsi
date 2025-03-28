@@ -64,7 +64,7 @@
         shadowSize: [41, 41]
     });
 
-    const wifiData = @json($wifi);
+    const wifiData = @json($wifi);  // Assuming $wifi includes 'total_pengguna'
     const markers = [];
 
     wifiData.forEach(wifi => {
@@ -91,17 +91,14 @@
             <strong>SSID:</strong> ${wifi.ssid}<br>
             <strong>Password:</strong> ${wifi.password}<br>
             <strong>Status:</strong> 
-            <span style="
-                font-weight: bold;
-                color: ${wifi.status === 'Online' ? '#28a745' : '#dc3545'};
-            ">
+            <span style="font-weight: bold; color: ${wifi.status === 'Online' ? '#28a745' : '#dc3545'};">
                 ${wifi.status}
-            </span>
+            </span><br>
+            <strong>Total Pengguna:</strong> ${wifi.total_pengguna || 0}  <!-- Display total pengguna -->
         </p>
     </div>
 `);
 
-        
         markers.push({ marker, status: wifi.status, nama: wifi.nama.toLowerCase(), lokasi: wifi.lokasi.toLowerCase(), lat: latitude, lng: longitude });
     });
 

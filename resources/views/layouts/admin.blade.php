@@ -1,21 +1,60 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name', 'Admin Panel') }}</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- SweetAlert2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        function confirmValidation(id) {
+            // SweetAlert2 confirmation dialog
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                text: "Pengaduan ini akan divalidasi.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Validasi!',
+                cancelButtonText: 'Batal',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // If confirmed, submit the form
+                    document.getElementById('validation-form-' + id).submit();
+                }
+            });
+        }
+    </script>
+
+<script>
+    function confirmDelete(id) {
+        Swal.fire({
+            title: 'Apakah Anda yakin?',
+            text: "WiFi ini akan dihapus!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, Hapus!',
+            cancelButtonText: 'Batal',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // If confirmed, submit the delete form
+                document.getElementById('delete-form-' + id).submit();
+            }
+        });
+    }
+</script>
 
     <!-- Load Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+
     <!-- Fonts & Icons -->
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <style>
-        
         body {
             margin: 0;
             font-family: 'Nunito', sans-serif;
@@ -182,21 +221,6 @@
             }
         });
     </script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var modals = document.querySelectorAll('.modal');
-        modals.forEach(function(modal) {
-            modal.addEventListener('hidden.bs.modal', function () {
-                document.body.classList.remove('modal-open');
-                var modalBackdrops = document.getElementsByClassName('modal-backdrop');
-                for (let i = 0; i < modalBackdrops.length; i++) {
-                    modalBackdrops[i].parentNode.removeChild(modalBackdrops[i]);
-                }
-            });
-        });
-    });
-</script>
 
 </body>
 </html>

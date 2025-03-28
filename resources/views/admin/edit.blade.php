@@ -13,7 +13,7 @@
             @csrf
             @method('PUT')
             <div class="mb-3">
-                <label for="nama" class="form-label">Lokasi WiFi</label>
+                <label for="nama" class="form-label">Nama WiFi</label>
                 <input type="text" class="form-control" id="nama" name="nama" value="{{ $wifi->nama }}" required>
             </div>
             <div class="mb-3">
@@ -38,6 +38,11 @@
                     <option value="Online" {{ $wifi->status == 'Online' ? 'selected' : '' }}>Online</option>
                     <option value="Offline" {{ $wifi->status == 'Offline' ? 'selected' : '' }}>Offline</option>
                 </select>
+            </div>
+            <!-- Added total_pengguna field -->
+            <div class="mb-3">
+                <label for="total_pengguna" class="form-label">Total Pengguna</label>
+                <input type="number" class="form-control" id="total_pengguna" name="total_pengguna" value="{{ $wifi->total_pengguna }}" min="0" required>
             </div>
             <button type="submit" class="btn btn-primary">
                 <i class="fas fa-save"></i> Simpan Perubahan

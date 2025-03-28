@@ -36,8 +36,11 @@ class AdminPetaController extends Controller
             'ssid' => 'required|string|max:255',
             'password' => 'required|string|max:255',
             'status' => 'required|in:Online,Offline',
+            'total_pengguna' => 'required|integer|min:0', // Validate total_pengguna to ensure it is a number greater than or equal to 0
+
         ]);
 
+        // Store the WiFi data including 'total_pengguna' initialized as 0
         WiFi::create([
             'nama' => $request->nama,
             'lokasi' => $request->lokasi,
@@ -47,6 +50,8 @@ class AdminPetaController extends Controller
             'status' => $request->status,
             'status_validasi' => 'Pending',
             'komentar' => null,
+            'total_pengguna' => $request->total_pengguna, // Save the total_pengguna
+
         ]);
 
         return redirect()->route('admin.peta')->with('success', 'WiFi berhasil ditambahkan, menunggu validasi super admin.');
@@ -66,8 +71,10 @@ class AdminPetaController extends Controller
             'ssid' => 'required|string|max:255',
             'password' => 'required|string|max:255',
             'status' => 'required|in:Online,Offline',
+            'total_pengguna' => 'required|integer|min:0'
         ]);
 
+        // Update the WiFi data including 'total_pengguna' if necessary
         $wifi->update($request->all());
 
         return redirect()->route('admin.peta')->with('success', 'WiFi berhasil diperbarui.');
@@ -82,7 +89,9 @@ class AdminPetaController extends Controller
 
     public function map()
     {
-        $wifi = WiFi::where('status_validasi', 'Disetujui')->get();
+        // Fetch only WiFi entries with approved or pending validation status
+        $wifi = WiFi::whereIn('status_validasi', ['Disetujui', 'Pending'])->get();
+
         return view('admin.map', compact('wifi'));
     }
 
@@ -93,10 +102,12 @@ class AdminPetaController extends Controller
             'komentar' => 'nullable|string|max:255',
         ]);
 
+        // Check if the current user is a superadmin
         if (auth()->user()->role !== 'superadmin') {
             return redirect()->route('admin.peta')->with('error', 'Anda tidak memiliki izin untuk memvalidasi.');
         }
 
+        // Update the WiFi validation status and komentar if rejected
         $wifi->update([
             'status_validasi' => $request->status_validasi,
             'komentar' => $request->status_validasi === 'Ditolak' ? $request->komentar : null,
@@ -121,6 +132,7 @@ class AdminPetaController extends Controller
         $sheet->setCellValue('G1', 'Status');
         $sheet->setCellValue('H1', 'Status Validasi');
         $sheet->setCellValue('I1', 'Komentar');
+        $sheet->setCellValue('J1', 'Total Pengguna'); // Added 'Total Pengguna' column
 
         $row = 2;
         foreach ($wifiData as $index => $data) {
@@ -133,6 +145,7 @@ class AdminPetaController extends Controller
             $sheet->setCellValue('G' . $row, $data->status);
             $sheet->setCellValue('H' . $row, $data->status_validasi);
             $sheet->setCellValue('I' . $row, $data->komentar);
+            $sheet->setCellValue('J' . $row, $data->total_pengguna); // Added total_pengguna
             $row++;
         }
 

@@ -12,23 +12,27 @@
 
                     <!-- Success Message -->
                     @if(session('success'))
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <div class="alert alert-success" role="alert">
                             {{ session('success') }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     @endif
 
                     <!-- Validation Errors -->
                     @if ($errors->any())
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <div class="alert alert-danger" role="alert">
                             <ul class="mb-0">
                                 @foreach ($errors->all() as $error)
                                     <li>{{ $error }}</li>
                                 @endforeach
                             </ul>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     @endif
+
+                    <!-- Custom Alert for Missing Fields -->
+                    <div id="missingFieldsAlert" class="alert alert-warning alert-dismissible fade show" role="alert" style="display:none;">
+                        <strong>Perhatian!</strong> Semua kolom  wajib diisi sebelum mengirim pengaduan.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
 
                     <!-- Complaint Form -->
                     <form action="{{ route('pengaduan.store') }}" method="POST" enctype="multipart/form-data" id="pengaduanForm" novalidate>
@@ -64,9 +68,9 @@
 
                         <!-- Upload Bukti (Optional) -->
                         <div class="mb-3">
-                            <label for="image_pengaduan" class="form-label">Upload Bukti (Opsional)</label>
+                            <label for="image_pengaduan" class="form-label">Upload Bukti </label>
                             <input type="file" class="form-control" id="image_pengaduan" name="image_pengaduan" accept="image/*">
-
+                        
                             <small class="text-muted">Format yang diterima: JPEG, PNG, JPG (Maksimal 2MB)</small>
                         </div>
 
@@ -78,7 +82,6 @@
                             @error('g-recaptcha-response')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
-                            <div id="captcha-error" class="text-danger mt-2" style="display: none;">Harap selesaikan verifikasi CAPTCHA sebelum mengirim pengaduan.</div>
                         </div>
 
                         <!-- Submit Button -->
@@ -109,16 +112,25 @@
         });
     });
 
-    // Validasi CAPTCHA sebelum submit
-   document.getElementById('pengaduanForm').addEventListener('submit', function(event) {
+    // Validasi CAPTCHA dan Field sebelum submit
+    document.getElementById('pengaduanForm').addEventListener('submit', function(event) {
         var response = grecaptcha.getResponse();
-        var captchaError = document.getElementById('captcha-error');
+        var missingFieldsAlert = document.getElementById('missingFieldsAlert');
+        var isValid = true;
 
-        if (response.length === 0) {
+        // Check if all required fields are filled
+        var requiredFields = document.querySelectorAll('select[required], textarea[required], input[type="file"]');
+        requiredFields.forEach(function(field) {
+            if (!field.value) {
+                isValid = false;
+            }
+        });
+
+        if (response.length === 0 || !isValid) {
             event.preventDefault(); // Mencegah form terkirim
-            captchaError.style.display = 'block'; // Menampilkan pesan kesalahan
+            missingFieldsAlert.style.display = 'block'; // Tampilkan alert
         } else {
-            captchaError.style.display = 'none'; // Sembunyikan pesan jika valid
+            missingFieldsAlert.style.display = 'none'; // Sembunyikan alert jika valid
         }
     });
 </script>

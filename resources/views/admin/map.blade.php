@@ -71,7 +71,7 @@
         const [latitude, longitude] = wifi.titik.split(',').map(coord => parseFloat(coord.trim()));
         const icon = wifi.status === 'Online' ? greenIcon : redIcon;
         const marker = L.marker([latitude, longitude], { icon }).addTo(map);
-        
+
         marker.bindPopup(`
     <div style="
         font-family: Arial, sans-serif;
@@ -93,15 +93,14 @@
             <strong>Status:</strong> 
             <span style="
                 font-weight: bold;
-                color: ${wifi.status === 'Online' ? '#28a745' : '#dc3545'};
-            ">
+                color: ${wifi.status === 'Online' ? '#28a745' : '#dc3545'};">
                 ${wifi.status}
-            </span>
+            </span><br>
+            <strong>Total Pengguna:</strong> ${wifi.total_pengguna || 0}
         </p>
     </div>
 `);
 
-        
         markers.push({ marker, status: wifi.status, nama: wifi.nama.toLowerCase(), lokasi: wifi.lokasi.toLowerCase(), lat: latitude, lng: longitude });
     });
 

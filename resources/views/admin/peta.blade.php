@@ -44,6 +44,7 @@
                         <th>Titik</th>
                         <th>SSID</th>
                         <th>Password</th>
+                        <th>Total Pengguna</th>
                         <th>Status Validasi</th>
                         <th>Status</th>
                         <th>Aksi</th>
@@ -58,6 +59,7 @@
                         <td>{{ $data->titik }}</td>
                         <td>{{ $data->ssid }}</td>
                         <td>{{ $data->password }}</td>
+                        <td>{{ $data->total_pengguna ?? 0 }}</td>
                         <td>
                             <span class="badge bg-{{ $data->status_validasi == 'Pending' ? 'warning' : ($data->status_validasi == 'Ditolak' ? 'danger' : 'success') }}">
                                 {{ $data->status_validasi }}
@@ -70,10 +72,10 @@
                         </td>
                         <td>
                             <a href="{{ route('admin.edit', $data->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                            <form action="{{ route('admin.destroy', $data->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus WiFi ini?');">
+                            <form action="{{ route('admin.destroy', $data->id) }}" method="POST" class="d-inline" id="delete-form-{{ $data->id }}">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+                                <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete({{ $data->id }})">Hapus</button>
                             </form>
                             @if($data->status_validasi == 'Ditolak')
                                 <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#komentarModal-{{ $data->id }}">
@@ -109,4 +111,7 @@
         @endif
     </div>
 </div>
+
 @endsection
+
+

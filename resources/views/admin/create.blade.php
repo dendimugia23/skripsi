@@ -16,13 +16,12 @@
                 <input type="text" class="form-control" id="nama" name="nama" required>
             </div>
             <div class="mb-3">
-                <label for="lihat_lokasi" class="form-label">Lihat Lokasi (Link Google Maps)</label>
+                <label for="lokasi" class="form-label">Lihat Lokasi (Link Google Maps)</label>
                 <input type="url" class="form-control" id="lokasi" name="lokasi" required>
             </div>
             <div class="mb-3">
                 <label for="titik" class="form-label">Titik (Latitude, Longitude)</label>
                 <input type="text" class="form-control" id="titik" name="titik" required>
-                
             </div>
             <div class="mb-3">
                 <label for="ssid" class="form-label">SSID</label>
@@ -38,6 +37,11 @@
                     <option value="Online">Online</option>
                     <option value="Offline">Offline</option>
                 </select>
+            </div>
+            <!-- Added total_pengguna field with default value of 0 -->
+            <div class="mb-3">
+                <label for="total_pengguna" class="form-label">Total Pengguna</label>
+                <input type="number" class="form-control" id="total_pengguna" name="total_pengguna" value="0" min="0" required>
             </div>
             <button type="submit" class="btn btn-primary">
                 <i class="fas fa-save"></i> Simpan

@@ -21,6 +21,7 @@ return new class extends Migration
             $table->enum('status', ['Online', 'Offline']);
             $table->enum('status_validasi', ['Pending', 'Disetujui', 'Ditolak'])->default('Pending');
             $table->string('komentar')->nullable();
+            $table->unsignedInteger('total_pengguna')->default(0); // Add this line to track the number of users
             $table->timestamps();
         });
     }
