@@ -9,7 +9,7 @@
 
         .dashboard {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(4, 1fr);
             gap: 20px;
         }
  body {
@@ -33,11 +33,12 @@
 <div class="content">
     
     <div class="dashboard">
-        <div class="card">Jumlah WiFi</div>
-        <div class="card">Jumlah WiFi Online</div>
-        <div class="card">Jumlah WiFi Offline</div>
-        <div class="card">Jumlah Pengaduan</div>
-        <div class="card">Jumlah Pengaduan Sudah Divalidasi</div>
-        <div class="card">Jumlah Pengaduan Belum Divalidasi</div>
+        <div class="card">Jumlah WiFi <br> {{ $wifi->count() }}</div>
+        <div class="card">WiFi Belum Divalidasi <br> {{ $wifi->where('status_validasi', 'Pending')->count() }}</div>
+        <div class="card">Jumlah WiFi Online <br> {{ $wifi->where('status', 'Online')->count() }}</div>
+        <div class="card">Jumlah WiFi Offline <br> {{ $wifi->where('status', 'Offline')->count() }}</div>
+        <div class="card">Jumlah Pengaduan <br> {{ $pengaduan->count() }}</div>
+        <div class="card">Jumlah Pengaduan Sudah Divalidasi <br> {{ $pengaduan->where('status_pengaduan', 'Tervalidasi')->count() }}</div>
+        <div class="card">Jumlah Pengaduan Belum Divalidasi <br> {{ $pengaduan->where('status_pengaduan', 'Proses')->count() }}</div>
     </div>
 </div>

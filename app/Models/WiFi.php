@@ -20,6 +20,6 @@ class WiFi extends Model
         'status',
         'status_validasi',
         'komentar',
-        'total_pengguna', // Add 'total_pengguna' to the $fillable array
+        'total_pengguna', 
     ];
 }

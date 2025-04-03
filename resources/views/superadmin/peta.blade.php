@@ -135,22 +135,3 @@
     </div>
 </div>
 @endsection
-
-@push('scripts')
-<script>
-    // Initialize tooltips
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl)
-    })
-
-    function validateRejection(form) {
-        const komentar = form.komentar.value.trim();
-        if (!komentar) {
-            alert('Harap berikan alasan penolakan sebelum mengirim.');
-            return false;
-        }
-        return true;
-    }
-</script>
-@endpush
