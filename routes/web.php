@@ -10,8 +10,8 @@ use App\Http\Controllers\PengaduanuserController;
 use App\Http\Controllers\SuperAdminController;
 use App\Http\Controllers\SuperAdminPetaController;
 use App\Http\Controllers\SuperAdminRekapitulasiController;
+use App\Http\Controllers\SuperAdminPengaduanController;
 use App\Http\Controllers\UserController;
-
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\WifiExport;
 
@@ -71,6 +71,7 @@ Route::middleware(['auth'])->group(function () {
 
         // Rekapitulasi Data
         Route::get('/rekapitulasi', [SuperAdminRekapitulasiController::class, 'index'])->name('superadmin.rekapitulasi');
+        Route::get('/pengaduan', [SuperAdminPengaduanController::class, 'index'])->name('superadmin.pengaduan');
 
         // Peta WiFi
         Route::get('/peta', [SuperAdminPetaController::class, 'index'])->name('superadmin.peta');
@@ -78,5 +79,8 @@ Route::middleware(['auth'])->group(function () {
 
         // Validasi WiFi
         Route::put('/validasi/{wifi}', [SuperAdminPetaController::class, 'validasi'])->name('superadmin.validasi');
+        Route::get('/rekapitulasi/export-excel', [SuperAdminRekapitulasiController::class, 'exportExcel'])->name('superadmin.rekapitulasi.excel');
+        Route::get('/rekapitulasi/export-pdf', [SuperAdminRekapitulasiController::class, 'exportPDF'])->name('superadmin.rekapitulasi.pdf');
+
     });
 });

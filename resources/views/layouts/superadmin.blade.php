@@ -160,7 +160,9 @@
         <h3>Super Admin Panel</h3>
         <a href="{{ route('superadmin.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
         <a href="{{ route('superadmin.peta') }}"><i class="fas fa-map"></i> Peta</a>
-        <a href="{{ route('superadmin.rekapitulasi') }}"><i class="fas fa-exclamation-circle"></i> Pengaduan</a>
+        <a href="{{ route('superadmin.pengaduan') }}"><i class="fas fa-exclamation-circle"></i> Pengaduan</a>
+        <!-- New Rekapitulasi Menu Item -->
+        <a href="{{ route('superadmin.rekapitulasi') }}"><i class="fas fa-clipboard-list"></i> Rekapitulasi</a>
     </div>
 
     <!-- Navbar -->

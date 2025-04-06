@@ -130,9 +130,7 @@ class AdminPetaController extends Controller
         $sheet->setCellValue('E1', 'SSID');
         $sheet->setCellValue('F1', 'Password');
         $sheet->setCellValue('G1', 'Status');
-        $sheet->setCellValue('H1', 'Status Validasi');
-        $sheet->setCellValue('I1', 'Komentar');
-        $sheet->setCellValue('J1', 'Total Pengguna'); // Added 'Total Pengguna' column
+        $sheet->setCellValue('H1', 'Total Pengguna'); // Added 'Total Pengguna' column
 
         $row = 2;
         foreach ($wifiData as $index => $data) {
@@ -143,9 +141,7 @@ class AdminPetaController extends Controller
             $sheet->setCellValue('E' . $row, $data->ssid);
             $sheet->setCellValue('F' . $row, $data->password);
             $sheet->setCellValue('G' . $row, $data->status);
-            $sheet->setCellValue('H' . $row, $data->status_validasi);
-            $sheet->setCellValue('I' . $row, $data->komentar);
-            $sheet->setCellValue('J' . $row, $data->total_pengguna); // Added total_pengguna
+            $sheet->setCellValue('H' . $row, $data->total_pengguna); // Added total_pengguna
             $row++;
         }
 

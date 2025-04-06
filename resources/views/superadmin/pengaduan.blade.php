@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.superadmin')
 
 @section('content')
 <div class="card shadow-sm" style="background-color: #ffffff; border: none;">
@@ -55,16 +55,11 @@
                     </td>
                     <td>
                         @if($data->status_pengaduan === 'Proses')
-                            <form id="validation-form-{{ $data->id }}" action="{{ route('admin.validasi', $data->id) }}" method="POST">
-                                @csrf
-                                @method('PUT')
-                                <input type="hidden" name="status_pengaduan" value="Tervalidasi">
-                                <button type="button" class="btn btn-success btn-sm d-flex align-items-center gap-2" onclick="confirmValidation({{ $data->id }})">
-                                    <i class="fas fa-check"></i> Validasi
-                                </button>
-                            </form>
+                            <span class="badge bg-secondary">Belum Diverifikasi</span>
+                        @elseif($data->status_pengaduan === 'Tervalidasi')
+                            <span class="badge bg-success">Sudah Diverifikasi</span>
                         @else
-                        <span class="badge bg-success">Sudah Diverifikasi</span>
+                            <span class="badge bg-muted">Status Tidak Dikenal</span>
                         @endif
                     </td>
                 </tr>
@@ -79,5 +74,3 @@
 </div>
 
 @endsection
-
-

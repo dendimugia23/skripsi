@@ -118,7 +118,7 @@
                                         </div>
                                     </div>
                                 @else
-                                    <span class="text-muted">Sudah Diverifikasi</span>
+                                <span class="badge bg-success">Sudah Diverifikasi</span>
                                 @endif
                             </td>
                         </tr>
