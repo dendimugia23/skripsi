@@ -14,8 +14,14 @@ class SuperAdminRekapitulasiController extends Controller
 {
     public function index(Request $request)
     {
+        // Ambil bulan dan tahun dari input request, jika tidak ada tahun, maka set ke tahun sekarang
         $bulan = $request->input('bulan');
         $tahun = $request->input('tahun', now()->year);
+
+        // Pastikan jika bulan ada, tahun juga harus ada, jika bulan tidak dipilih, tahun tetap sekarang
+        if (!$bulan) {
+            $tahun = now()->year;
+        }
 
         $wifiBaru = $this->getWifiBaru($bulan, $tahun);
         $rekap = $this->getRekapData($bulan, $tahun);
@@ -25,8 +31,14 @@ class SuperAdminRekapitulasiController extends Controller
 
     public function exportExcel(Request $request)
     {
+        // Ambil bulan dan tahun dari input request, jika tidak ada tahun, maka set ke tahun sekarang
         $bulan = $request->input('bulan');
         $tahun = $request->input('tahun', now()->year);
+
+        // Pastikan jika bulan ada, tahun juga harus ada, jika bulan tidak dipilih, tahun tetap sekarang
+        if (!$bulan) {
+            $tahun = now()->year;
+        }
 
         $namaBulan = [
             1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April',
@@ -41,7 +53,7 @@ class SuperAdminRekapitulasiController extends Controller
         $sheet = $spreadsheet->getActiveSheet();
 
         $judul = 'Rekapitulasi Data WiFi - ' . ($bulan ? $namaBulan[$bulan] : 'Semua Bulan') . ' ' . $tahun;
-        $sheet->mergeCells('A1:F1');
+        $sheet->mergeCells('A1:G1');
         $sheet->setCellValue('A1', $judul);
         $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(14);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
@@ -51,9 +63,10 @@ class SuperAdminRekapitulasiController extends Controller
         $sheet->setCellValue('C3', 'Status WiFi');
         $sheet->setCellValue('D3', 'Jumlah Pengaduan');
         $sheet->setCellValue('E3', 'Kategori Pengaduan');
-        $sheet->setCellValue('F3', 'Keterangan');
-        $sheet->getStyle('A3:F3')->getFont()->setBold(true);
-        $sheet->getStyle('A3:F3')->getAlignment()->setHorizontal('center');
+        $sheet->setCellValue('F3', 'Total Pengguna');
+        $sheet->setCellValue('G3', 'Keterangan');
+        $sheet->getStyle('A3:G3')->getFont()->setBold(true);
+        $sheet->getStyle('A3:G3')->getAlignment()->setHorizontal('center');
 
         $row = 4;
         $totalWifiBaru = 0;
@@ -64,23 +77,24 @@ class SuperAdminRekapitulasiController extends Controller
             $sheet->setCellValue("C{$row}", $data['status']);
             $sheet->setCellValue("D{$row}", $data['jumlah_pengaduan']);
             $sheet->setCellValue("E{$row}", $data['kategori_pengaduan']);
+            $sheet->setCellValue("F{$row}", $data['total_pengguna']);  // Total Pengguna per WiFi
 
             $isBaru = $wifiBaru->contains('id', $data['id_wifi']);
             if ($isBaru) {
-                $sheet->setCellValue("F{$row}", 'WiFi Baru');
+                $sheet->setCellValue("G{$row}", 'WiFi Baru');
                 $totalWifiBaru++;
             } else {
-                $sheet->setCellValue("F{$row}", '-');
+                $sheet->setCellValue("G{$row}", '-');
             }
 
             $row++;
         }
 
-        $sheet->mergeCells("A{$row}:F{$row}");
+        $sheet->mergeCells("A{$row}:G{$row}");
         $sheet->setCellValue("A{$row}", 'Total Titik WiFi Baru: ' . $totalWifiBaru);
         $sheet->getStyle("A{$row}")->getFont()->setBold(true);
 
-        foreach (range('A', 'F') as $col) {
+        foreach (range('A', 'G') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
 
@@ -94,8 +108,15 @@ class SuperAdminRekapitulasiController extends Controller
 
     public function exportPDF(Request $request)
     {
+        // Ambil bulan dan tahun dari input request, jika tidak ada tahun, maka set ke tahun sekarang
         $bulan = $request->input('bulan');
         $tahun = $request->input('tahun', now()->year);
+
+        // Pastikan jika bulan ada, tahun juga harus ada, jika bulan tidak dipilih, tahun tetap sekarang
+        if (!$bulan) {
+            $tahun = now()->year;
+        }
+
         $rekap = $this->getRekapData($bulan, $tahun);
         $wifiBaru = $this->getWifiBaru($bulan, $tahun);
 
@@ -134,22 +155,23 @@ class SuperAdminRekapitulasiController extends Controller
 
     private function getRekapData($bulan, $tahun)
     {
+        // Jika bulan dan tahun tidak ada, atur tahun ke tahun sekarang
+        $tahun = $tahun ?: now()->year;
+
         $dataWifi = Wifi::where('status_validasi', 'Disetujui')
             ->when($bulan, function ($query) use ($bulan, $tahun) {
                 return $query->where(function ($q) use ($bulan, $tahun) {
-                    $q->whereYear('created_at', '<', $tahun)
-                        ->orWhere(function ($q2) use ($bulan, $tahun) {
-                            $q2->whereYear('created_at', $tahun)
-                                ->whereMonth('created_at', '<=', $bulan);
-                        });
+                    $q->whereYear('created_at', $tahun)
+                      ->whereMonth('created_at', $bulan);
                 });
             }, function ($query) use ($tahun) {
-                return $query->whereYear('created_at', '<=', $tahun);
+                return $query->whereYear('created_at', $tahun);
             })
             ->get();
 
         return $dataWifi->map(function ($wifi, $index) use ($bulan, $tahun) {
-            $query = Pengaduan::where('nama_wifi', $wifi->nama);
+            $query = Pengaduan::where('nama_wifi', $wifi->nama)
+                ->where('status_pengaduan', '!=', 'Ditolak'); // <= Hanya pengaduan yang bukan 'Ditolak'
 
             if ($bulan) $query->whereMonth('created_at', $bulan);
             if ($tahun) $query->whereYear('created_at', $tahun);
@@ -161,6 +183,9 @@ class SuperAdminRekapitulasiController extends Controller
                 return $kategori . ' (' . count($item) . ')';
             })->implode(', ');
 
+            // Menampilkan total pengguna per WiFi
+            $totalPengguna = $wifi->total_pengguna;  // Memastikan kolom total_pengguna diambil dari model Wifi
+
             return [
                 'no' => $index + 1,
                 'id_wifi' => $wifi->id,
@@ -168,12 +193,16 @@ class SuperAdminRekapitulasiController extends Controller
                 'status' => $wifi->status,
                 'jumlah_pengaduan' => $jumlahPengaduan,
                 'kategori_pengaduan' => $kategoriPengaduan ?: '-',
+                'total_pengguna' => $totalPengguna,
             ];
         });
     }
 
     private function getWifiBaru($bulan, $tahun)
     {
+        // Jika bulan dan tahun tidak ada, atur tahun ke tahun sekarang
+        $tahun = $tahun ?: now()->year;
+
         return Wifi::where('status_validasi', 'Disetujui')
             ->when($bulan, function ($query) use ($bulan, $tahun) {
                 return $query->whereMonth('created_at', $bulan)

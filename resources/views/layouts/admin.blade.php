@@ -31,6 +31,26 @@
     </script>
 
 <script>
+    function confirmTolak(id) {
+        // SweetAlert2 confirmation dialog
+        Swal.fire({
+            title: 'Apakah Anda yakin?',
+            text: "Pengaduan ini akan ditolak",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, Validasi!',
+            cancelButtonText: 'Batal',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // If confirmed, submit the form
+                document.getElementById('tolak-form-' + id).submit();
+            }
+        });
+    }
+</script>
+
+<script>
     function confirmDelete(id) {
         Swal.fire({
             title: 'Apakah Anda yakin?',
@@ -185,7 +205,7 @@
     <div class="sidebar" id="sidebar">
         <h3>Admin Panel</h3>
         <a href="{{ route('admin.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
-        <a href="{{ route('admin.peta') }}"><i class="fas fa-map"></i> Peta</a>
+        <a href="{{ route('admin.peta') }}"><i class="fas fa-map"></i> WiFi</a>
         <a href="{{ route('admin.pengaduan') }}"><i class="fas fa-exclamation-circle"></i> Pengaduan</a>
     </div>
 

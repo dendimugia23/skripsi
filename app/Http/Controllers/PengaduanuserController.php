@@ -1,11 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Pengaduan;
 use App\Models\WiFi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Anhskohbo\NoCaptcha\NoCaptcha;
 
 class PengaduanuserController extends Controller
 {
@@ -22,7 +22,7 @@ class PengaduanuserController extends Controller
             'kategori_pengaduan' => 'required|string',
             'deskripsi_pengaduan' => 'required|string',
             'image_pengaduan' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-            
+            'image_ktp' => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         $ticketNumber = 'TKT-' . strtoupper(Str::random(8));
@@ -32,11 +32,17 @@ class PengaduanuserController extends Controller
         $pengaduan->nama_wifi = $request->nama_wifi;
         $pengaduan->kategori_pengaduan = $request->kategori_pengaduan;
         $pengaduan->deskripsi_pengaduan = $request->deskripsi_pengaduan;
-       
 
+        // Simpan gambar pengaduan
         if ($request->hasFile('image_pengaduan')) {
             $imagePath = $request->file('image_pengaduan')->store('pengaduan_images', 'public');
             $pengaduan->image_pengaduan = $imagePath;
+        }
+
+        // Simpan gambar KTP
+        if ($request->hasFile('image_ktp')) {
+            $ktpPath = $request->file('image_ktp')->store('ktp_images', 'public');
+            $pengaduan->image_ktp = $ktpPath;
         }
 
         $pengaduan->save();
@@ -57,7 +63,7 @@ class PengaduanuserController extends Controller
         return response()->json([
             'success' => true,
             'ticket_number' => $pengaduan->ticket_number,
-            'status' => $pengaduan->status ?? 'Dalam Proses', // Bisa disesuaikan dengan status sebenarnya
+            'status' => $pengaduan->status_pengaduan ?? 'Dalam Proses',
             'description' => $pengaduan->deskripsi_pengaduan
         ]);
     }

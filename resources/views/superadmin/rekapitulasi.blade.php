@@ -34,9 +34,7 @@
                 <select name="bulan" class="form-select">
                     <option value="">-- Pilih Bulan --</option>
                     @foreach($namaBulan as $num => $name)
-                        <option value="{{ $num }}" {{ $selectedBulan == $num ? 'selected' : '' }}>
-                            {{ $name }}
-                        </option>
+                        <option value="{{ $num }}" {{ $selectedBulan == $num ? 'selected' : '' }}>{{ $name }}</option>
                     @endforeach
                 </select>
             </div>
@@ -45,9 +43,7 @@
                 <select name="tahun" class="form-select">
                     <option value="">-- Pilih Tahun --</option>
                     @for($y = now()->year; $y >= 2020; $y--)
-                        <option value="{{ $y }}" {{ $selectedTahun == $y ? 'selected' : '' }}>
-                            {{ $y }}
-                        </option>
+                        <option value="{{ $y }}" {{ $selectedTahun == $y ? 'selected' : '' }}>{{ $y }}</option>
                     @endfor
                 </select>
             </div>
@@ -79,41 +75,54 @@
                         <th>Status WiFi</th>
                         <th>Jumlah Pengaduan</th>
                         <th>Kategori Pengaduan</th>
+                        <th>Total Pengguna</th>
                         <th>Keterangan</th>
                     </tr>
                 </thead>
                 <tbody>
+                    @php $counter = 1; @endphp
                     @forelse($rekap as $data)
                         @php
                             $isBaru = $wifiBaru->contains('nama', $data['lokasi']);
+                            $jumlahValid = isset($data['pengaduan']) 
+                                ? collect($data['pengaduan'])->where('status_pengaduan', '!=', 'Ditolak')->count()
+                                : $data['jumlah_pengaduan'];
+
+                            $kategoriValid = isset($data['pengaduan'])
+                                ? collect($data['pengaduan'])->where('status_pengaduan', '!=', 'Ditolak')->pluck('kategori_pengaduan')->unique()->implode(', ')
+                                : $data['kategori_pengaduan'];
                         @endphp
+
+                        @if($jumlahValid > 0)
                         <tr>
-                            <td>{{ $data['no'] }}</td>
+                            <td>{{ $counter++ }}</td>
                             <td class="text-start">{{ $data['lokasi'] }}</td>
                             <td>
                                 <span class="badge bg-{{ $data['status'] === 'Online' ? 'success' : 'danger' }}">
                                     {{ $data['status'] }}
                                 </span>
                             </td>
-                            <td>{{ $data['jumlah_pengaduan'] }}</td>
-                            <td>{{ $data['kategori_pengaduan'] ?: '-' }}</td>
+                            <td>{{ $jumlahValid }}</td>
+                            <td>{{ $kategoriValid ?: '-' }}</td>
+                            <td>{{ $data['total_pengguna'] }}</td> <!-- Total pengguna per WiFi -->
                             <td>
                                 @if($isBaru)
                                     <span class="badge bg-info text-dark">WiFi Baru</span>
                                 @else
-                                    -
+                                    - 
                                 @endif
                             </td>
                         </tr>
+                        @endif
                     @empty
                         <tr>
-                            <td colspan="6" class="text-center">Tidak ada data WiFi atau pengaduan ditemukan.</td>
+                            <td colspan="7" class="text-center">Tidak ada data WiFi atau pengaduan ditemukan.</td>
                         </tr>
                     @endforelse
 
                     <!-- Total WiFi Baru -->
                     <tr class="table-light fw-bold">
-                        <td colspan="6" class="text-start">Total Titik WiFi Baru: {{ $wifiBaru->count() }}</td>
+                        <td colspan="7" class="text-start">Total Titik WiFi Baru: {{ $wifiBaru->count() }}</td>
                     </tr>
                 </tbody>
             </table>

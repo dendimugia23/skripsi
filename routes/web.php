@@ -47,6 +47,7 @@ Route::middleware(['auth'])->group(function () {
         // Pengaduan untuk Admin
         Route::get('/pengaduan', [PengaduanController::class, 'index'])->name('admin.pengaduan');
         Route::put('/pengaduan/{pengaduan}/validasi', [PengaduanController::class, 'validasi'])->name('admin.validasi');
+        Route::put('/pengaduan/{pengaduan}/tolak', [PengaduanController::class, 'tolak'])->name('admin.tolak');
 
         // CRUD WiFi & Peta
         Route::prefix('peta')->group(function () {

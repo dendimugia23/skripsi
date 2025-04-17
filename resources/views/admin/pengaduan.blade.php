@@ -27,6 +27,7 @@
                     <th>Kategori</th>
                     <th>Deskripsi</th>
                     <th>Gambar</th>
+                    <th>KTP</th>
                     <th>Status</th>
                     <th>Validasi</th>
                 </tr>
@@ -49,13 +50,22 @@
                         @endif
                     </td>
                     <td>
-                        <span class="badge bg-{{ $data->status_pengaduan == 'Selesai' || $data->status_pengaduan == 'Tervalidasi' ? 'success' : 'warning' }}">
+                        @if($data->image_ktp)
+                            <a href="{{ asset('storage/' . $data->image_ktp) }}" target="_blank">
+                                <img src="{{ asset('storage/' . $data->image_ktp) }}" alt="Foto KTP" class="img-thumbnail" style="max-width: 100px;">
+                            </a>
+                        @else
+                            Tidak ada KTP
+                        @endif
+                    </td>
+                    <td>
+                        <span class="badge bg-{{ $data->status_pengaduan == 'Selesai' || $data->status_pengaduan == 'Tervalidasi' ? 'success' : ($data->status_pengaduan == 'Ditolak' ? 'danger' : 'warning') }}">
                             {{ $data->status_pengaduan }}
                         </span>
                     </td>
                     <td>
                         @if($data->status_pengaduan === 'Proses')
-                            <form id="validation-form-{{ $data->id }}" action="{{ route('admin.validasi', $data->id) }}" method="POST">
+                            <form id="validasi-form-{{ $data->id }}" action="{{ route('admin.validasi', $data->id) }}" method="POST" style="display: inline;">
                                 @csrf
                                 @method('PUT')
                                 <input type="hidden" name="status_pengaduan" value="Tervalidasi">
@@ -63,8 +73,17 @@
                                     <i class="fas fa-check"></i> Validasi
                                 </button>
                             </form>
+
+                            <form id="tolak-form-{{ $data->id }}" action="{{ route('admin.tolak', $data->id) }}" method="POST" style="display: inline;">
+                                @csrf
+                                @method('PUT')
+                                <input type="hidden" name="status_pengaduan" value="Ditolak">
+                                <button type="button" class="btn btn-danger btn-sm d-flex align-items-center gap-2" onclick="confirmTolak({{ $data->id }})">
+                                    <i class="fas fa-times"></i> Tolak
+                                </button>
+                            </form>
                         @else
-                        <span class="badge bg-success">Sudah Diverifikasi</span>
+                            <span class="badge bg-success">Sudah Diverifikasi</span>
                         @endif
                     </td>
                 </tr>
@@ -78,6 +97,6 @@
     </div>
 </div>
 
+
+  
 @endsection
-
-

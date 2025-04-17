@@ -15,12 +15,13 @@ return new class extends Migration
             $table->string('kategori_pengaduan')->nullable();
             $table->text('deskripsi_pengaduan')->nullable();
             $table->string('image_pengaduan')->nullable();
-            $table->enum('status_pengaduan', ['Proses', 'Tervalidasi'])->default('Proses');
+            $table->string('image_ktp')->nullable();
+            $table->enum('status_pengaduan', ['Proses', 'Tervalidasi', 'Ditolak'])->default('Proses'); // ✅ Tambah 'Ditolak'
             $table->timestamps();
         });
     }
 
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('pengaduans');
     }

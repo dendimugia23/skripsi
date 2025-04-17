@@ -27,6 +27,7 @@
                     <th>Kategori</th>
                     <th>Deskripsi</th>
                     <th>Gambar</th>
+                    <th>KTP</th>
                     <th>Status</th>
                     <th>Validasi</th>
                 </tr>
@@ -49,7 +50,19 @@
                         @endif
                     </td>
                     <td>
-                        <span class="badge bg-{{ $data->status_pengaduan == 'Selesai' || $data->status_pengaduan == 'Tervalidasi' ? 'success' : 'warning' }}">
+                        @if($data->image_ktp)
+                            <a href="{{ asset('storage/' . $data->image_ktp) }}" target="_blank">
+                                <img src="{{ asset('storage/' . $data->image_ktp) }}" alt="Foto KTP" class="img-thumbnail" style="max-width: 100px;">
+                            </a>
+                        @else
+                            Tidak ada KTP
+                        @endif
+                    </td>
+                    <td>
+                        <span class="badge bg-{{ 
+                            $data->status_pengaduan == 'Selesai' || $data->status_pengaduan == 'Tervalidasi' ? 'success' :
+                            ($data->status_pengaduan == 'Ditolak' ? 'danger' : 'warning') 
+                        }}">
                             {{ $data->status_pengaduan }}
                         </span>
                     </td>
@@ -58,6 +71,8 @@
                             <span class="badge bg-secondary">Belum Diverifikasi</span>
                         @elseif($data->status_pengaduan === 'Tervalidasi')
                             <span class="badge bg-success">Sudah Diverifikasi</span>
+                        @elseif($data->status_pengaduan === 'Ditolak')
+                            <span class="badge bg-danger">Ditolak</span>
                         @else
                             <span class="badge bg-muted">Status Tidak Dikenal</span>
                         @endif
@@ -72,5 +87,4 @@
         </div>
     </div>
 </div>
-
 @endsection

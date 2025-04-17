@@ -9,7 +9,7 @@
 
         <div class="d-flex gap-2">
             <a href="{{ route('superadmin.map') }}" class="btn btn-success btn-sm">
-                <i class="fas fa-map-marker-alt"></i> Peta
+                <i class="fas fa-map-marker-alt"></i> Map
             </a>
         </div>
     </div>
@@ -74,13 +74,14 @@
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-end" style="min-width: 120px;">
                                             <li>
-                                                <form action="{{ route('superadmin.validasi', $data->id) }}" method="POST">
+                                                <button type="button" class="dropdown-item text-success fw-bold d-flex align-items-center gap-2" onclick="konfirmasiValidasi('{{ $data->id }}')">
+                                                    <i class="fas fa-check"></i> Disetujui
+                                                </button>
+                                                
+                                                <form id="form-validasi-{{ $data->id }}" action="{{ route('superadmin.validasi', $data->id) }}" method="POST" style="display: none;">
                                                     @csrf
                                                     @method('PUT')
                                                     <input type="hidden" name="status_validasi" value="Disetujui">
-                                                    <button type="submit" class="dropdown-item text-success fw-bold d-flex align-items-center gap-2">
-                                                        <i class="fas fa-check"></i> Disetujui
-                                                    </button>
                                                 </form>
                                             </li>
                                             <li>

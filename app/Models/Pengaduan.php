@@ -15,7 +15,7 @@ class Pengaduan extends Model
         'kategori_pengaduan',
         'deskripsi_pengaduan',
         'image_pengaduan',
+        'image_ktp', // <- kolom untuk menyimpan foto KTP
         'status_pengaduan',
     ];
-    
 }

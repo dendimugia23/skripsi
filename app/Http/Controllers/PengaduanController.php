@@ -31,19 +31,19 @@ class PengaduanController extends Controller
     {
         // Validasi input request
         $request->validate([
-            'status_pengaduan' => 'required|in:Tervalidasi',
+            'status_pengaduan' => 'required|in:Tervalidasi', // hanya validasi untuk status Tervalidasi
         ]);
 
         try {
             // Cari data pengaduan berdasarkan ID, jika tidak ditemukan akan otomatis 404
             $pengaduan = Pengaduan::findOrFail($id);
 
-            // Cek apakah status validasi masih 'Proses'
+            // Cek apakah status pengaduan masih 'Proses'
             if ($pengaduan->status_pengaduan !== 'Proses') {
-                return back()->with('error', 'Pengaduan ini sudah divalidasi sebelumnya.');
+                return back()->with('error', 'Pengaduan ini sudah divalidasi atau ditolak sebelumnya.');
             }
 
-            // Update status validasi
+            // Update status pengaduan menjadi 'Tervalidasi'
             $pengaduan->update(['status_pengaduan' => 'Tervalidasi']);
 
             return back()->with('success', 'Status validasi pengaduan berhasil diperbarui.');
@@ -52,4 +52,33 @@ class PengaduanController extends Controller
             return back()->with('error', 'Terjadi kesalahan saat memperbarui status validasi.');
         }
     }
+
+    /**
+     * Menolak pengaduan dan mengubah status menjadi 'Ditolak'.
+     */
+    public function tolak(Request $request, $id)
+    {
+        $request->validate([
+            'status_pengaduan' => 'required|in:Ditolak', // hanya validasi untuk status Tervalidasi
+        ]);
+
+        try {
+            // Cari data pengaduan berdasarkan ID, jika tidak ditemukan akan otomatis 404
+            $pengaduan = Pengaduan::findOrFail($id);
+
+            // Cek apakah status pengaduan masih 'Proses'
+            if ($pengaduan->status_pengaduan !== 'Proses') {
+                return back()->with('error', 'Pengaduan ini sudah divalidasi atau ditolak sebelumnya.');
+            }
+
+            // Update status pengaduan menjadi 'Tervalidasi'
+            $pengaduan->update(['status_pengaduan' => 'Ditolak']);
+
+            return back()->with('success', 'Status validasi pengaduan berhasil diperbarui.');
+        } catch (\Exception $e) {
+            Log::error('Error updating validation status: ' . $e->getMessage());
+            return back()->with('error', 'Terjadi kesalahan saat memperbarui status validasi.');
+        }
+    }
+
 }

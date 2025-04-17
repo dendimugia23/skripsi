@@ -29,6 +29,24 @@
             return true;
         }
     </script>
+    <script>
+        function konfirmasiValidasi(id) {
+            Swal.fire({
+                title: 'Setujui WiFi Ini?',
+                text: "Data akan divalidasi dan ditampilkan di peta.",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Validasi!',
+                cancelButtonText: 'Batal',
+                reverseButtons: 'true'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('form-validasi-' + id).submit();
+                }
+            });
+        }
+    </script>
+    
     <style>
         body {
             margin: 0;
@@ -159,7 +177,7 @@
     <div class="sidebar" id="sidebar">
         <h3>Super Admin Panel</h3>
         <a href="{{ route('superadmin.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
-        <a href="{{ route('superadmin.peta') }}"><i class="fas fa-map"></i> Peta</a>
+        <a href="{{ route('superadmin.peta') }}"><i class="fas fa-map"></i> WiFi</a>
         <a href="{{ route('superadmin.pengaduan') }}"><i class="fas fa-exclamation-circle"></i> Pengaduan</a>
         <!-- New Rekapitulasi Menu Item -->
         <a href="{{ route('superadmin.rekapitulasi') }}"><i class="fas fa-clipboard-list"></i> Rekapitulasi</a>

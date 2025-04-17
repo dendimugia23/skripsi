@@ -12,7 +12,7 @@
                 <i class="fas fa-plus"></i> Tambah
             </a>
             <a href="{{ route('admin.map') }}" class="btn btn-success btn-sm">
-                <i class="fas fa-map-marker-alt"></i> Peta
+                <i class="fas fa-map-marker-alt"></i> Map
             </a>
             <a href="{{ route('admin.wifi.export') }}" class="btn btn-success btn-sm">
                 <i class="fas fa-file-excel"></i> Export Excel
