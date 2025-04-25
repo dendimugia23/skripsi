@@ -16,54 +16,60 @@
         <div class="faq-container">
 
           <div class="faq-item faq-active">
-            <h3>Non consectetur a erat nam at lectus urna duis?</h3>
+            <h3>Apa itu layanan Wifi Publik?</h3>
             <div class="faq-content">
-              <p>Feugiat pretium nibh ipsum consequat. Tempus iaculis urna id volutpat lacus laoreet non curabitur gravida. Venenatis lectus magna fringilla urna porttitor rhoncus dolor purus non.</p>
+              <p>Wifi Publik merupakan Layanan wifi Gratis yang dapat dimanfaatkan masyarakat untuk berbagai keperluan. Layanan wifi publik tersebut dapat diakses di tempat-tempat umum dan strategis yang bisa dijangkau secara mudah oleh masyarakat, dekat dengan lingkungan masyarakat.</p>
             </div>
             <i class="faq-toggle bi bi-chevron-right"></i>
           </div><!-- End Faq item-->
 
           <div class="faq-item">
-            <h3>Feugiat scelerisque varius morbi enim nunc faucibus?</h3>
+            <h3>Apakah Wifi Publik berbayar?</h3>
             <div class="faq-content">
-              <p>Dolor sit amet consectetur adipiscing elit pellentesque habitant morbi. Id interdum velit laoreet id donec ultrices. Fringilla phasellus faucibus scelerisque eleifend donec pretium. Est pellentesque elit ullamcorper dignissim. Mauris ultrices eros in cursus turpis massa tincidunt dui.</p>
+              <p>Wifi publik dapat dimanfaatkan secara gratis oleh masyarakat.</p>
             </div>
             <i class="faq-toggle bi bi-chevron-right"></i>
           </div><!-- End Faq item-->
 
           <div class="faq-item">
-            <h3>Dolor sit amet consectetur adipiscing elit pellentesque?</h3>
+            <h3>Ada berapa titik lokasi Wifi Publik di Kabupaten Garut?</h3>
             <div class="faq-content">
-              <p>Eleifend mi in nulla posuere sollicitudin aliquam ultrices sagittis orci. Faucibus pulvinar elementum integer enim. Sem nulla pharetra diam sit amet nisl suscipit. Rutrum tellus pellentesque eu tincidunt. Lectus urna duis convallis convallis tellus. Urna molestie at elementum eu facilisis sed odio morbi quis</p>
+              <p>Untuk saat ini Wifi Publik di Kabupaten Garut terdapat 62 titik wifi.
+              </p>
             </div>
             <i class="faq-toggle bi bi-chevron-right"></i>
           </div><!-- End Faq item-->
 
           <div class="faq-item">
-            <h3>Ac odio tempor orci dapibus. Aliquam eleifend mi in nulla?</h3>
+            <h3>Di mana saja letak lokasi Wifi Publik?</h3>
             <div class="faq-content">
-              <p>Dolor sit amet consectetur adipiscing elit pellentesque habitant morbi. Id interdum velit laoreet id donec ultrices. Fringilla phasellus faucibus scelerisque eleifend donec pretium. Est pellentesque elit ullamcorper dignissim. Mauris ultrices eros in cursus turpis massa tincidunt dui.</p>
+              <p>
+                Untuk mengetahui letak lokasi Wifi Publik, silakan klik tautan berikut: 
+                <a href="#map"><strong>Lokasi Wifi Publik</strong></a>.
+              </p>
             </div>
+            <i class="faq-toggle bi bi-chevron-right"></i>
+          </div><!-- End Faq item-->
+          
+          <div class="faq-item">
+            <h3>Siapa saja yang dapat menggukan layanan Wifi Publik?</h3>
+           <div class="faq-content">
+              <p>Seluruh masyarakat dapat menggunakan layanan ini, mulai dari pelajar, pelaku UMKM, pekerja yang ingin mendepatkan informasi dari Internet.</p>
+             </div>
             <i class="faq-toggle bi bi-chevron-right"></i>
           </div><!-- End Faq item-->
 
           <div class="faq-item">
-            <h3>Tempus quam pellentesque nec nam aliquam sem et tortor?</h3>
+            <h3>Bagaimana cara mengajukan pengaduan wifi yang bermasalah?</h3>
             <div class="faq-content">
-              <p>Molestie a iaculis at erat pellentesque adipiscing commodo. Dignissim suspendisse in est ante in. Nunc vel risus commodo viverra maecenas accumsan. Sit amet nisl suscipit adipiscing bibendum est. Purus gravida quis blandit turpis cursus in</p>
+              <p>
+                Silakan pilih menu <strong>Pengaduan</strong> atau klik 
+                <a href="{{ route('pengaduan.user') }}"><strong>di sini</strong></a> untuk mengajukan pengaduan.
+              </p>
             </div>
             <i class="faq-toggle bi bi-chevron-right"></i>
-          </div><!-- End Faq item-->
-
-          <div class="faq-item">
-            <h3>Perspiciatis quod quo quos nulla quo illum ullam?</h3>
-            <div class="faq-content">
-              <p>Enim ea facilis quaerat voluptas quidem et dolorem. Quis et consequatur non sed in suscipit sequi. Distinctio ipsam dolore et.</p>
-            </div>
-            <i class="faq-toggle bi bi-chevron-right"></i>
-          </div><!-- End Faq item-->
-
-        </div>
+          </div><!-- End Faq item -->
+          
 
       </div><!-- End Faq Column-->
 

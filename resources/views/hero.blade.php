@@ -1,7 +1,7 @@
 <!-- Hero Section -->
 <section id="hero" class="hero section">
   <div class="hero-bg">
-    <img src="{{ asset('assets/img/hero-bg-light.webp') }}" alt="Background Hero">
+    <img src="{{ asset('assets/img/foto2.png') }}" alt="Background Hero">
   </div>
   <div class="container text-center">
     <div class="d-flex flex-column justify-content-center align-items-center">
@@ -10,7 +10,7 @@
       <div class="d-flex" data-aos="fade-up" data-aos-delay="200">
         <a href="#map" class="btn-get-started">Tampilkan lokasi Wifi</a>
       </div>
-      <img src="{{ asset('assets/img/hero-services-img.webp') }}" class="img-fluid hero-img" alt="Hero Services" data-aos="zoom-out" data-aos-delay="300">
+      <img src="{{ asset('assets/img/foto3.png  ') }}" class="img-fluid hero-img" alt="Hero Services" data-aos="zoom-out" data-aos-delay="300">
     </div>
   </div>
 </section>
