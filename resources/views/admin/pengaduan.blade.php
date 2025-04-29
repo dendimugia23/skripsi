@@ -33,7 +33,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($pengaduan as $index => $data)
+                @forelse($pengaduan as $index => $data)
                 <tr>
                     <td>{{ $index + 1 }}</td>
                     <td>{{ $data->ticket_number }}</td>
@@ -87,7 +87,11 @@
                         @endif
                     </td>
                 </tr>
-                @endforeach
+                @empty
+                <tr>
+                    <td colspan="9" class="text-center">Data pengaduan tidak ada.</td>
+                </tr>
+                @endforelse
             </tbody>
         </table>
 
@@ -96,7 +100,4 @@
         </div>
     </div>
 </div>
-
-
-  
 @endsection

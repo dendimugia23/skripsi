@@ -66,14 +66,14 @@
                             <textarea class="form-control" id="deskripsi_pengaduan" name="deskripsi_pengaduan" rows="4" required placeholder="Jelaskan masalah yang Anda alami...">{{ old('deskripsi_pengaduan') }}</textarea>
                         </div>
 
-                        <!-- Upload Bukti (Wajib) -->
+                        <!-- Upload Bukti -->
                         <div class="mb-3">
                             <label for="image_pengaduan" class="form-label">Upload Bukti</label>
                             <input type="file" class="form-control" id="image_pengaduan" name="image_pengaduan" accept="image/*" required>
                             <small class="text-muted">Format yang diterima: JPEG, PNG, JPG (Maksimal 2MB)</small>
                         </div>
 
-                        <!-- Upload KTP (Wajib) -->
+                        <!-- Upload KTP -->
                         <div class="mb-3">
                             <label for="image_ktp" class="form-label">Upload Foto KTP</label>
                             <input type="file" class="form-control" id="image_ktp" name="image_ktp" accept="image/*" required>
@@ -108,6 +108,9 @@
     </div>
 </div>
 
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <!-- Script untuk Select2 dan Validasi -->
 <script>
     $(document).ready(function () {
@@ -122,6 +125,7 @@
         var response = grecaptcha.getResponse();
         var missingFieldsAlert = document.getElementById('missingFieldsAlert');
         var isValid = true;
+        var maxFileSize = 2 * 1024 * 1024; // 2MB
 
         var requiredFields = document.querySelectorAll('select[required], textarea[required], input[type="file"][required]');
         requiredFields.forEach(function (field) {
@@ -130,6 +134,35 @@
             }
         });
 
+        // Cek ukuran file Bukti
+        var imagePengaduan = document.getElementById('image_pengaduan');
+        if (imagePengaduan.files.length > 0 && imagePengaduan.files[0].size > maxFileSize) {
+            event.preventDefault();
+            Swal.fire({
+                icon: 'error',
+                title: 'Ukuran File Terlalu Besar',
+                text: 'Maaf, file Bukti Pengaduan tidak boleh lebih dari 2MB.',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK'
+            });
+            return;
+        }
+
+        // Cek ukuran file KTP
+        var imageKtp = document.getElementById('image_ktp');
+        if (imageKtp.files.length > 0 && imageKtp.files[0].size > maxFileSize) {
+            event.preventDefault();
+            Swal.fire({
+                icon: 'error',
+                title: 'Ukuran File Terlalu Besar',
+                text: 'Maaf, file Foto KTP tidak boleh lebih dari 2MB.',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK'
+            });
+            return;
+        }
+
+        // Validasi CAPTCHA dan field lainnya
         if (response.length === 0 || !isValid) {
             event.preventDefault();
             missingFieldsAlert.style.display = 'block';

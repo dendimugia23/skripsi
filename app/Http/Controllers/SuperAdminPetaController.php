@@ -8,20 +8,22 @@ use Illuminate\Support\Facades\Log;
 
 class SuperAdminPetaController extends Controller
 {
-    /**
-     * Middleware untuk memastikan hanya superadmin yang dapat mengakses controller ini.
-     */
-
-    /**
-     * Menampilkan daftar WiFi yang perlu divalidasi.
-     */
-    public function index()
+    
+    public function index(Request $request)
     {
         try {
-            // Ambil data WiFi dengan status validasi yang bukan 'Ditolak' dan urutkan berdasarkan yang terbaru dengan pagination
+            $search = $request->query('search');
+
             $wifi = WiFi::where('status_validasi', '!=', 'Ditolak')
-                        ->latest()
-                        ->paginate(10);
+                ->when($search, function ($query, $search) {
+                    return $query->where(function($q) use ($search) {
+                        $q->where('nama', 'like', '%' . $search . '%')
+                          ->orWhere('lokasi', 'like', '%' . $search . '%')
+                          ->orWhere('ssid', 'like', '%' . $search . '%');
+                    });
+                })
+                ->latest()
+                ->paginate(10);
 
             return view('superadmin.peta', compact('wifi'));
         } catch (\Exception $e) {
@@ -35,22 +37,18 @@ class SuperAdminPetaController extends Controller
      */
     public function validasi(Request $request, $id)
     {
-        // Validasi input request
         $request->validate([
             'status_validasi' => 'required|in:Disetujui,Ditolak',
             'komentar' => 'nullable|string|max:255',
         ]);
 
         try {
-            // Cari data WiFi berdasarkan ID, jika tidak ditemukan akan otomatis 404
             $wifi = WiFi::findOrFail($id);
 
-            // Cek apakah status validasi masih 'Pending'
             if ($wifi->status_validasi !== 'Pending') {
                 return back()->with('error', 'WiFi ini sudah divalidasi sebelumnya.');
             }
 
-            // Update status validasi dan komentar jika ada
             $wifi->update([
                 'status_validasi' => $request->status_validasi,
                 'komentar' => $request->status_validasi === 'Ditolak' ? $request->komentar : null,
@@ -63,9 +61,11 @@ class SuperAdminPetaController extends Controller
         }
     }
 
+    /**
+     * Menampilkan peta lokasi WiFi.
+     */
     public function map()
     {
-        // Ambil semua data WiFi yang tidak memiliki status 'Ditolak'
         $wifi = WiFi::where('status_validasi', '!=', 'Ditolak')->get();
         return view('superadmin.map', compact('wifi'));
     }

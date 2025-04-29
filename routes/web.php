@@ -63,6 +63,7 @@ Route::middleware(['auth'])->group(function () {
 
             // Export WiFi ke Excel
             Route::get('/wifi/export', [AdminPetaController::class, 'export'])->name('admin.wifi.export');
+            Route::get('/wifi/export-pdf', [AdminPetaController::class, 'exportPDF'])->name('admin.wifi.pdf');
         });
     });
 

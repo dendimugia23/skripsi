@@ -8,11 +8,11 @@
 
     <div class="card-body">
         <div class="mb-3">
-            <form action="{{ route('admin.pengaduan') }}" method="GET">
+            <form action="{{ route('superadmin.pengaduan') }}" method="GET">
                 <div class="input-group">
                     <input type="text" name="search" class="form-control" placeholder="Cari berdasarkan Nomor Tiket, Nama Wifi, atau Kategori..." value="{{ request('search') }}">
                     <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-search"></i> Cari
+                        <i class="fas fa-search me-1"></i> Cari
                     </button>
                 </div>
             </form>
@@ -33,7 +33,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($pengaduan as $index => $data)
+                @forelse($pengaduan as $index => $data)
                 <tr>
                     <td>{{ $index + 1 }}</td>
                     <td>{{ $data->ticket_number }}</td>
@@ -46,7 +46,7 @@
                                 <img src="{{ asset('storage/' . $data->image_pengaduan) }}" alt="Gambar Pengaduan" class="img-thumbnail" style="max-width: 100px;">
                             </a>
                         @else
-                            Tidak ada gambar
+                            <span class="text-muted">Tidak ada gambar</span>
                         @endif
                     </td>
                     <td>
@@ -55,7 +55,7 @@
                                 <img src="{{ asset('storage/' . $data->image_ktp) }}" alt="Foto KTP" class="img-thumbnail" style="max-width: 100px;">
                             </a>
                         @else
-                            Tidak ada KTP
+                            <span class="text-muted">Tidak ada KTP</span>
                         @endif
                     </td>
                     <td>
@@ -74,11 +74,15 @@
                         @elseif($data->status_pengaduan === 'Ditolak')
                             <span class="badge bg-danger">Ditolak</span>
                         @else
-                            <span class="badge bg-muted">Status Tidak Dikenal</span>
+                            <span class="badge bg-secondary">Status Tidak Dikenal</span>
                         @endif
                     </td>
                 </tr>
-                @endforeach
+                @empty
+                <tr>
+                    <td colspan="9" class="text-center text-muted">Data pengaduan tidak ada.</td>
+                </tr>
+                @endforelse
             </tbody>
         </table>
 

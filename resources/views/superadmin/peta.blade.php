@@ -6,7 +6,6 @@
         <a href="{{ route('superadmin.peta') }}" class="text-decoration-none text-dark">
             <h5 class="card-title mb-0 fw-bold" style="font-size: 1.25rem;">Daftar WiFi</h5>
         </a>
-
         <div class="d-flex gap-2">
             <a href="{{ route('superadmin.map') }}" class="btn btn-success btn-sm">
                 <i class="fas fa-map-marker-alt"></i> Map
@@ -27,27 +26,24 @@
             </form>
         </div>
 
-        @if($wifi->isEmpty())
-            <div class="alert alert-info text-center">Tidak ada data WiFi yang tersedia.</div>
-        @else
-            <div class="table-responsive">
-                <table class="table table-striped">
-                    <thead>
-                        <tr class="text-center">
-                            <th>No</th>
-                            <th>Lokasi WiFi</th>
-                            <th>Lihat Lokasi</th>
-                            <th>Titik</th>
-                            <th>SSID</th>
-                            <th>Password</th>
-                            <th>Status Validasi</th>
-                            <th>Status</th>
-                            <th>Total Pengguna</th> <!-- New column for Total Pengguna -->
-                            <th style="width: 120px;">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($wifi as $index => $data)
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr class="text-center">
+                        <th>No</th>
+                        <th>Lokasi WiFi</th>
+                        <th>Lihat Lokasi</th>
+                        <th>Titik</th>
+                        <th>SSID</th>
+                        <th>Password</th>
+                        <th>Status Validasi</th>
+                        <th>Status</th>
+                        <th>Total Pengguna</th>
+                        <th style="width: 120px;">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($wifi as $index => $data)
                         <tr class="text-center">
                             <td>{{ ($wifi->currentPage() - 1) * $wifi->perPage() + $index + 1 }}</td>
                             <td>{{ $data->nama }}</td>
@@ -65,7 +61,7 @@
                                     {{ $data->status }}
                                 </span>
                             </td>
-                            <td>{{ $data->total_pengguna ?? 0 }}</td> <!-- Displaying Total Pengguna -->
+                            <td>{{ $data->total_pengguna ?? 0 }}</td>
                             <td>
                                 @if($data->status_validasi === 'Pending')
                                     <div class="dropdown">
@@ -77,7 +73,6 @@
                                                 <button type="button" class="dropdown-item text-success fw-bold d-flex align-items-center gap-2" onclick="konfirmasiValidasi('{{ $data->id }}')">
                                                     <i class="fas fa-check"></i> Disetujui
                                                 </button>
-                                                
                                                 <form id="form-validasi-{{ $data->id }}" action="{{ route('superadmin.validasi', $data->id) }}" method="POST" style="display: none;">
                                                     @csrf
                                                     @method('PUT')
@@ -92,12 +87,12 @@
                                         </ul>
                                     </div>
 
-                                    <!-- Reject Modal -->
-                                    <div class="modal fade" id="rejectModal-{{ $data->id }}" tabindex="-1" aria-labelledby="rejectModalLabel" aria-hidden="true">
+                                    <!-- Modal Penolakan -->
+                                    <div class="modal fade" id="rejectModal-{{ $data->id }}" tabindex="-1" aria-labelledby="rejectModalLabel-{{ $data->id }}" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="rejectModalLabel">Tolak Validasi WiFi</h5>
+                                                    <h5 class="modal-title" id="rejectModalLabel-{{ $data->id }}">Tolak Validasi WiFi</h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <form action="{{ route('superadmin.validasi', $data->id) }}" method="POST" onsubmit="return validateRejection(this)">
@@ -107,7 +102,7 @@
                                                         <input type="hidden" name="status_validasi" value="Ditolak">
                                                         <div class="mb-3">
                                                             <label for="komentar" class="form-label">Komentar Penolakan</label>
-                                                            <textarea name="komentar" class="form-control" rows="3" placeholder="Berikan alasan penolakan..."></textarea>
+                                                            <textarea name="komentar" class="form-control" rows="3" placeholder="Berikan alasan penolakan..." required></textarea>
                                                         </div>
                                                     </div>
                                                     <div class="modal-footer">
@@ -119,20 +114,25 @@
                                         </div>
                                     </div>
                                 @else
-                                <span class="badge bg-success">Sudah Diverifikasi</span>
+                                    <span class="badge bg-success">Terverifikasi</span>
                                 @endif
                             </td>
                         </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
+                    @empty
+                        <tr>
+                            <td colspan="10" class="text-center text-muted">Data WiFi tidak tersedia.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
 
-            <!-- Pagination -->
-            <div class="d-flex justify-content-center mt-4">
-                {{ $wifi->onEachSide(1)->links('pagination::bootstrap-5') }}
-            </div>
-        @endif
+        <!-- Pagination -->
+        <div class="d-flex justify-content-center mt-4">
+            {{ $wifi->onEachSide(1)->links('pagination::bootstrap-5') }}
+        </div>
     </div>
 </div>
+
+
 @endsection

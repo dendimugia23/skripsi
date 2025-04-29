@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\WiFi;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 class AdminPetaController extends Controller
 {
@@ -152,4 +154,64 @@ class AdminPetaController extends Controller
 
         return response()->download($tempFile, $fileName)->deleteFileAfterSend(true);
     }
+
+
+public function exportPDF()
+{
+    $wifiData = WiFi::all(); // Ambil semua data WiFi, sama kayak di export()
+
+    $htmlTable = '
+    <table>
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Lokasi WiFi</th>
+                <th>Lihat Lokasi</th>
+                <th>Titik</th>
+                <th>SSID</th>
+                <th>Password</th>
+                <th>Status</th>
+                <th>Total Pengguna</th>
+            </tr>
+        </thead>
+        <tbody>';
+
+    foreach ($wifiData as $index => $data) {
+        $htmlTable .= '
+            <tr>
+                <td>' . ($index + 1) . '</td>
+                <td>' . htmlspecialchars($data->nama) . '</td>
+                <td>' . htmlspecialchars($data->lokasi) . '</td>
+                <td>' . htmlspecialchars($data->titik) . '</td>
+                <td>' . htmlspecialchars($data->ssid) . '</td>
+                <td>' . htmlspecialchars($data->password) . '</td>
+                <td>' . htmlspecialchars($data->status) . '</td>
+                <td>' . htmlspecialchars($data->total_pengguna) . '</td>
+            </tr>';
+    }
+
+    $htmlTable .= '</tbody></table>';
+
+    $styledHtml = '
+    <html>
+    <head>
+        <style>
+            body { font-family: Arial, sans-serif; font-size: 12px; }
+            h2 { text-align: center; margin-bottom: 20px; }
+            table { width: 100%; border-collapse: collapse; }
+            th, td { border: 1px solid #000; padding: 5px; text-align: left; }
+            th { background-color: #f2f2f2; }
+        </style>
+    </head>
+    <body>
+        <h2>Daftar WiFi Publik</h2>
+        ' . $htmlTable . '
+    </body>
+    </html>';
+
+    $pdf = Pdf::loadHTML($styledHtml)->setPaper('A4', 'landscape');
+
+    return $pdf->download('wifi_list_' . date('Ymd_His') . '.pdf');
+}
+
 }
