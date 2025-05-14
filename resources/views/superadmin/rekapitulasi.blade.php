@@ -21,13 +21,23 @@
         <!-- Filter Bulan dan Tahun -->
         <form action="{{ route('superadmin.rekapitulasi') }}" method="GET" class="row g-2 mb-3">
             @php
+                use Carbon\Carbon;
+
                 $namaBulan = [
                     1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April',
                     5 => 'Mei', 6 => 'Juni', 7 => 'Juli', 8 => 'Agustus',
                     9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember'
                 ];
-                $selectedBulan = request('bulan', $bulan);
-                $selectedTahun = request('tahun', $tahun);
+
+                $selectedBulan = request('bulan');
+                $selectedTahun = request('tahun', now()->year);
+
+                $filterDate = null;
+                if ($selectedBulan) {
+                    $filterDate = Carbon::createFromDate($selectedTahun, $selectedBulan, 1)->endOfMonth();
+                } else {
+                    $filterDate = Carbon::createFromDate($selectedTahun, 12, 31); // akhir tahun
+                }
             @endphp
 
             <div class="col-md-auto">
@@ -62,7 +72,11 @@
 
         <!-- Info Bulan -->
         <div class="mb-3">
-            <strong>Menampilkan data bulan {{ $namaBulan[$bulan] ?? '-' }} {{ $tahun }}</strong>
+            @if($selectedBulan)
+                <strong>Menampilkan data bulan {{ $namaBulan[$selectedBulan] ?? '-' }} {{ $selectedTahun }}</strong>
+            @else
+                <strong>Menampilkan data tahun {{ $selectedTahun }}</strong>
+            @endif
         </div>
 
         <!-- Tabel Rekapitulasi -->
@@ -80,20 +94,43 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @php $counter = 1; @endphp
+                    @php 
+                        $counter = 1; 
+                        $totalWifiBaruBulanIni = 0;
+                    @endphp
+
                     @forelse($rekap as $data)
                         @php
-                            $isBaru = $wifiBaru->contains('nama', $data['lokasi']);
+                            $wifiData = $wifiBaru->firstWhere('nama', $data['lokasi']);
+                            $isBaru = false;
+                            $createdAt = $wifiData ? Carbon::parse($wifiData->created_at) : null;
+
+                            // Abaikan WiFi yang dibuat setelah tanggal filter
+                            if ($createdAt && $createdAt->gt($filterDate)) {
+                                continue;
+                            }
+
+                            if ($createdAt) {
+                                if ($selectedBulan) {
+                                    $isBaru = $createdAt->month == $selectedBulan && $createdAt->year == $selectedTahun;
+                                } else {
+                                    $isBaru = $createdAt->year == $selectedTahun;
+                                }
+
+                                if ($isBaru) {
+                                    $totalWifiBaruBulanIni++;
+                                }
+                            }
+
                             $jumlahValid = isset($data['pengaduan']) 
                                 ? collect($data['pengaduan'])->where('status_pengaduan', '!=', 'Ditolak')->count()
-                                : $data['jumlah_pengaduan'];
+                                : ($data['jumlah_pengaduan'] ?? 0);
 
                             $kategoriValid = isset($data['pengaduan'])
                                 ? collect($data['pengaduan'])->where('status_pengaduan', '!=', 'Ditolak')->pluck('kategori_pengaduan')->unique()->implode(', ')
-                                : $data['kategori_pengaduan'];
+                                : ($data['kategori_pengaduan'] ?? '-');
                         @endphp
 
-                        @if($jumlahValid > 0)
                         <tr>
                             <td>{{ $counter++ }}</td>
                             <td class="text-start">{{ $data['lokasi'] }}</td>
@@ -104,16 +141,15 @@
                             </td>
                             <td>{{ $jumlahValid }}</td>
                             <td>{{ $kategoriValid ?: '-' }}</td>
-                            <td>{{ $data['total_pengguna'] }}</td> <!-- Total pengguna per WiFi -->
+                            <td>{{ $data['total_pengguna'] ?? 0 }}</td>
                             <td>
                                 @if($isBaru)
                                     <span class="badge bg-info text-dark">WiFi Baru</span>
                                 @else
-                                    - 
+                                    -
                                 @endif
                             </td>
                         </tr>
-                        @endif
                     @empty
                         <tr>
                             <td colspan="7" class="text-center">Tidak ada data WiFi atau pengaduan ditemukan.</td>
@@ -122,7 +158,7 @@
 
                     <!-- Total WiFi Baru -->
                     <tr class="table-light fw-bold">
-                        <td colspan="7" class="text-start">Total Titik WiFi Baru: {{ $wifiBaru->count() }}</td>
+                        <td colspan="7" class="text-start">Total Titik WiFi Baru: {{ $totalWifiBaruBulanIni }}</td>
                     </tr>
                 </tbody>
             </table>

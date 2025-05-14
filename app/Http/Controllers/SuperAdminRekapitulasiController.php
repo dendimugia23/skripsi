@@ -14,11 +14,9 @@ class SuperAdminRekapitulasiController extends Controller
 {
     public function index(Request $request)
     {
-        // Ambil bulan dan tahun dari input request, jika tidak ada tahun, maka set ke tahun sekarang
         $bulan = $request->input('bulan');
         $tahun = $request->input('tahun', now()->year);
 
-        // Pastikan jika bulan ada, tahun juga harus ada, jika bulan tidak dipilih, tahun tetap sekarang
         if (!$bulan) {
             $tahun = now()->year;
         }
@@ -31,11 +29,9 @@ class SuperAdminRekapitulasiController extends Controller
 
     public function exportExcel(Request $request)
     {
-        // Ambil bulan dan tahun dari input request, jika tidak ada tahun, maka set ke tahun sekarang
         $bulan = $request->input('bulan');
         $tahun = $request->input('tahun', now()->year);
 
-        // Pastikan jika bulan ada, tahun juga harus ada, jika bulan tidak dipilih, tahun tetap sekarang
         if (!$bulan) {
             $tahun = now()->year;
         }
@@ -77,7 +73,7 @@ class SuperAdminRekapitulasiController extends Controller
             $sheet->setCellValue("C{$row}", $data['status']);
             $sheet->setCellValue("D{$row}", $data['jumlah_pengaduan']);
             $sheet->setCellValue("E{$row}", $data['kategori_pengaduan']);
-            $sheet->setCellValue("F{$row}", $data['total_pengguna']);  // Total Pengguna per WiFi
+            $sheet->setCellValue("F{$row}", $data['total_pengguna']);
 
             $isBaru = $wifiBaru->contains('id', $data['id_wifi']);
             if ($isBaru) {
@@ -108,11 +104,9 @@ class SuperAdminRekapitulasiController extends Controller
 
     public function exportPDF(Request $request)
     {
-        // Ambil bulan dan tahun dari input request, jika tidak ada tahun, maka set ke tahun sekarang
         $bulan = $request->input('bulan');
         $tahun = $request->input('tahun', now()->year);
 
-        // Pastikan jika bulan ada, tahun juga harus ada, jika bulan tidak dipilih, tahun tetap sekarang
         if (!$bulan) {
             $tahun = now()->year;
         }
@@ -155,23 +149,18 @@ class SuperAdminRekapitulasiController extends Controller
 
     private function getRekapData($bulan, $tahun)
     {
-        // Jika bulan dan tahun tidak ada, atur tahun ke tahun sekarang
         $tahun = $tahun ?: now()->year;
 
         $dataWifi = Wifi::where('status_validasi', 'Disetujui')
-            ->when($bulan, function ($query) use ($bulan, $tahun) {
-                return $query->where(function ($q) use ($bulan, $tahun) {
-                    $q->whereYear('created_at', $tahun)
-                      ->whereMonth('created_at', $bulan);
-                });
-            }, function ($query) use ($tahun) {
-                return $query->whereYear('created_at', $tahun);
+            ->whereYear('created_at', '<=', $tahun)
+            ->when($bulan, function ($query) use ($bulan) {
+                $query->whereMonth('created_at', '<=', $bulan);
             })
             ->get();
 
         return $dataWifi->map(function ($wifi, $index) use ($bulan, $tahun) {
             $query = Pengaduan::where('nama_wifi', $wifi->nama)
-                ->where('status_pengaduan', '!=', 'Ditolak'); // <= Hanya pengaduan yang bukan 'Ditolak'
+                ->where('status_pengaduan', '!=', 'Ditolak');
 
             if ($bulan) $query->whereMonth('created_at', $bulan);
             if ($tahun) $query->whereYear('created_at', $tahun);
@@ -183,9 +172,6 @@ class SuperAdminRekapitulasiController extends Controller
                 return $kategori . ' (' . count($item) . ')';
             })->implode(', ');
 
-            // Menampilkan total pengguna per WiFi
-            $totalPengguna = $wifi->total_pengguna;  // Memastikan kolom total_pengguna diambil dari model Wifi
-
             return [
                 'no' => $index + 1,
                 'id_wifi' => $wifi->id,
@@ -193,22 +179,19 @@ class SuperAdminRekapitulasiController extends Controller
                 'status' => $wifi->status,
                 'jumlah_pengaduan' => $jumlahPengaduan,
                 'kategori_pengaduan' => $kategoriPengaduan ?: '-',
-                'total_pengguna' => $totalPengguna,
+                'total_pengguna' => $wifi->total_pengguna,
             ];
         });
     }
 
     private function getWifiBaru($bulan, $tahun)
     {
-        // Jika bulan dan tahun tidak ada, atur tahun ke tahun sekarang
         $tahun = $tahun ?: now()->year;
 
         return Wifi::where('status_validasi', 'Disetujui')
-            ->when($bulan, function ($query) use ($bulan, $tahun) {
-                return $query->whereMonth('created_at', $bulan)
-                             ->whereYear('created_at', $tahun);
-            }, function ($query) use ($tahun) {
-                return $query->whereYear('created_at', $tahun);
+            ->whereYear('created_at', $tahun)
+            ->when($bulan, function ($query) use ($bulan) {
+                return $query->whereMonth('created_at', $bulan);
             })
             ->get();
     }

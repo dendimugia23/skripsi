@@ -12,7 +12,8 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            AdminSeeder::class, // Pastikan ini ada
+            AdminSeeder::class,
+            WiFiSeeder::class, // Pastikan ini ada
         ]);
     }
 }
