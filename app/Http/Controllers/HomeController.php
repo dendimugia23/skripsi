@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\WiFi;
 use App\Models\Pengaduan;
+use Illuminate\Support\Str;
 
 class HomeController extends Controller
 {
@@ -21,7 +22,7 @@ class HomeController extends Controller
     /**
      * Menangani pencarian tiket pengaduan.
      */
-    use Illuminate\Support\Str;
+   
 
     public function searchPengaduan(Request $request)
     {
