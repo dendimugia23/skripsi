@@ -4,9 +4,11 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Select2 -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -17,21 +19,22 @@
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
 
-    <!-- Scripts -->
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
-
-    <!-- Tambahkan Font Awesome untuk Icons -->
+    <!-- App CSS & JS -->
+    <link rel="stylesheet" href="{{ secure_asset('build/assets/app-BaVMVknW.css') }}">
+    <script type="module" src="{{ secure_asset('build/assets/app-e9C80sKX.js') }}"></script>
+    
+    <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-    <!-- Tambahkan Google Fonts untuk Poppins -->
+
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 
     <style>
-        /* Custom CSS untuk responsif */
         html, body {
             margin: 0;
             padding: 0;
             height: 100%;
-            background-color: #58a6d5; /* Warna latar belakang biru */
+            background-color: #58a6d5;
         }
 
         #app {
@@ -48,6 +51,7 @@
         body {
             font-family: 'Poppins', sans-serif;
         }
+
         .form-select {
             font-size: 14px;
             padding: 10px;
@@ -55,8 +59,8 @@
 
         .card {
             width: 100%;
-            max-width: 500px; /* Lebar maksimum card */
-            margin: 0 auto; /* Pusatkan card */
+            max-width: 500px;
+            margin: 0 auto;
         }
 
         .input-group-text {
@@ -77,13 +81,13 @@
 
         @media (max-width: 576px) {
             .card {
-                border-radius: 0; /* Hilangkan border radius pada layar kecil */
+                border-radius: 0;
             }
             h4 {
-                font-size: 1.5rem; /* Ukuran font lebih kecil untuk mobile */
+                font-size: 1.5rem;
             }
             p {
-                font-size: 0.9rem; /* Ukuran font lebih kecil untuk mobile */
+                font-size: 0.9rem;
             }
         }
     </style>
