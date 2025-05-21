@@ -43,7 +43,7 @@ class HomeController extends Controller
         'description_pengaduan' => $pengaduan->deskripsi
     ]);
 }
-
+    
 
     /**
      * Menampilkan halaman dashboard setelah login.
