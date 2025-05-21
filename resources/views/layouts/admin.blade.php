@@ -1,80 +1,26 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
     <title>{{ config('app.name', 'Admin Panel') }}</title>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- SweetAlert2 CDN -->
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- FontAwesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
+
+    <!-- Fonts -->
+    <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet" />
+
+    <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <script>
-        function confirmValidation(id) {
-            // SweetAlert2 confirmation dialog
-            Swal.fire({
-                title: 'Apakah Anda yakin?',
-                text: "Pengaduan ini akan divalidasi.",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Ya, Validasi!',
-                cancelButtonText: 'Batal',
-                reverseButtons: true
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // If confirmed, submit the form
-                    document.getElementById('validation-form-' + id).submit();
-                }
-            });
-        }
-    </script>
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-<script>
-    function confirmTolak(id) {
-        // SweetAlert2 confirmation dialog
-        Swal.fire({
-            title: 'Apakah Anda yakin?',
-            text: "Pengaduan ini akan ditolak",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Ya, Validasi!',
-            cancelButtonText: 'Batal',
-            reverseButtons: true
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // If confirmed, submit the form
-                document.getElementById('tolak-form-' + id).submit();
-            }
-        });
-    }
-</script>
-
-<script>
-    function confirmDelete(id) {
-        Swal.fire({
-            title: 'Apakah Anda yakin?',
-            text: "WiFi ini akan dihapus!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Ya, Hapus!',
-            cancelButtonText: 'Batal',
-            reverseButtons: true
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // If confirmed, submit the delete form
-                document.getElementById('delete-form-' + id).submit();
-            }
-        });
-    }
-</script>
-
-    <!-- Load Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Fonts & Icons -->
-    <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <style>
         body {
             margin: 0;
@@ -199,6 +145,56 @@
             }
         }
     </style>
+
+    <script>
+        function confirmValidation(id) {
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                text: "Pengaduan ini akan divalidasi.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Validasi!',
+                cancelButtonText: 'Batal',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('validasi-form-' + id).submit();
+                }
+            });
+        }
+
+        function confirmTolak(id) {
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                text: "Pengaduan ini akan ditolak.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Tolak!',
+                cancelButtonText: 'Batal',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('tolak-form-' + id).submit();
+                }
+            });
+        }
+
+        function confirmDelete(id) {
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                text: "WiFi ini akan dihapus!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Hapus!',
+                cancelButtonText: 'Batal',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('delete-form-' + id).submit();
+                }
+            });
+        }
+    </script>
 </head>
 <body>
     <!-- Sidebar -->
@@ -212,11 +208,11 @@
     <!-- Navbar -->
     <div class="navbar">
         <button class="menu-btn" id="menu-btn"><i class="fas fa-bars"></i></button>
-        <a href="{{ route('logout') }}" class="logout-btn" 
+        <a href="{{ route('logout') }}" class="logout-btn"
            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
             <i class="fas fa-sign-out-alt"></i> Logout
         </a>
-        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display:none;">
             @csrf
         </form>
     </div>
@@ -227,8 +223,9 @@
     </div>
 
     <script>
+        // Sidebar toggle
         document.getElementById('menu-btn').addEventListener('click', function (event) {
-            event.stopPropagation(); // Mencegah event bubbling ke document
+            event.stopPropagation();
             document.getElementById('sidebar').classList.toggle('active');
         });
 
@@ -242,6 +239,5 @@
             }
         });
     </script>
-
 </body>
 </html>
