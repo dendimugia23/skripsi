@@ -21,27 +21,34 @@ class HomeController extends Controller
     /**
      * Menangani pencarian tiket pengaduan.
      */
-   public function searchPengaduan(Request $request)
-{
-    $request->validate(['ticket_number' => 'required|string']);
+    use Illuminate\Support\Str;
 
-    $pengaduan = Pengaduan::where('ticket_number', $request->ticket_number)->first();
-
-    if (!$pengaduan) {
+    public function searchPengaduan(Request $request)
+    {
+        $request->validate([
+            'ticket_number' => 'required|string',
+        ]);
+    
+        $ticket = trim($request->ticket_number);
+    
+        // Pencarian case-insensitive
+        $pengaduan = Pengaduan::whereRaw('LOWER(ticket_number) = ?', [Str::lower($ticket)])->first();
+    
+        if (!$pengaduan) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Nomor tiket tidak ditemukan.'
+            ], 404);
+        }
+    
         return response()->json([
-            'success' => false,
-            'message' => 'Nomor tiket tidak ditemukan.'
-        ], 404);
+            'success' => true,
+            'ticket_number' => $pengaduan->ticket_number,
+            'status_pengaduan' => $pengaduan->status_pengaduan,
+            'description_pengaduan' => $pengaduan->deskripsi
+        ]);
     }
-
-    return response()->json([
-        'success' => true,
-        'ticket_number' => $pengaduan->ticket_number,
-        'status_pengaduan' => $pengaduan->status_pengaduan,
-        'description_pengaduan' => $pengaduan->deskripsi
-    ]);
-}
-
+    
     
 
     /**
