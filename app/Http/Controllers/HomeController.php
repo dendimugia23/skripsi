@@ -21,7 +21,7 @@ class HomeController extends Controller
     /**
      * Menangani pencarian tiket pengaduan.
      */
-    public function searchPengaduan(Request $request)
+   public function searchPengaduan(Request $request)
 {
     $request->validate(['ticket_number' => 'required|string']);
 
