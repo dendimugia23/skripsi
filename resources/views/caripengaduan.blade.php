@@ -43,7 +43,6 @@
           <h4>Hasil Pencarian</h4>
           <p><strong>Nomor Tiket:</strong> <span id="resultTicket"></span></p>
           <p><strong>Status:</strong> <span id="resultStatus"></span></p>
-          <p><strong>Deskripsi:</strong> <span id="resultDescription"></span></p>
         </div>
       </div>
     </div>
