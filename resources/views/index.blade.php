@@ -42,7 +42,7 @@
   <header id="header" class="header d-flex align-items-center fixed-top">
     <div class="container-fluid container-xl position-relative d-flex align-items-center">
 
-      <a href="index.html" class="logo d-flex align-items-center me-auto">
+      <a href="#hero" class="logo d-flex align-items-center me-auto">
         
         <h1 class="sitename">SIG WiFi Publik</h1>
       </a>

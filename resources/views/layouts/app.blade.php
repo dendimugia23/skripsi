@@ -15,8 +15,9 @@
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
 
     <!-- Scripts -->
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
-
+    <link rel="stylesheet" href="{{ asset('build/assets/app-BaVMVknW.css') }}">
+    <script type="module" src="{{ asset('build/assets/app-e9C80sKX.js') }}"></script>
+    
     <!-- Tambahkan Font Awesome untuk Icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <!-- Tambahkan Google Fonts untuk Poppins -->
