@@ -25,7 +25,9 @@ class HomeController extends Controller
     {
         $request->validate(['ticket_number' => 'required|string']);
 
-        $pengaduan = Pengaduan::where('ticket_number', $request->ticket_number)->first();
+        $ticket = strtolower($request->ticket_number);
+
+        $pengaduan = Pengaduan::whereRaw('LOWER(ticket_number) = ?', [$ticket])->first();
 
         if (!$pengaduan) {
             return response()->json([
@@ -49,13 +51,12 @@ class HomeController extends Controller
     {
         $user = Auth::user();
 
-        // Redirect sesuai role
         if ($user->role === 'super_admin') {
             return redirect()->route('superadmin.dashboard');
         } elseif ($user->role === 'admin') {
             return redirect()->route('admin.dashboard');
         }
 
-        return view('dashboard'); // Pastikan file resources/views/dashboard.blade.php ada
+        return view('dashboard');
     }
 }
